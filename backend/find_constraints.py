@@ -2,30 +2,23 @@ import prompts
 import json
 import boto3
 
-def get_few_shot_prompt(valid_constraints, invalid_constraints):
-    prompt = ""
-    for constraint in valid_constraints:
-        prompt += prompts.VALID_CONSTRAINTS + "\n" + json.dumps(constraint) + "\n"
-    for constraint in invalid_constraints:
-        prompt += prompts.INVALID_CONSTRAINTS + "\n" + json.dumps(constraint) + "\n"
-    return prompt
 
-def generate_constraints(n_constraints, prompt, db_json, MODEL_ID, bedrock,
+def generate_constraints(n_constraints, initial_prompt, db_json, MODEL_ID, bedrock,
                          valid_constraints, invalid_constraints):
 
-    if not prompt : # initial prompt
+    if not initial_prompt : # initial prompt
         db_string = json.dumps(db_json)
-        prompt = prompts.INTRO_CONSTRAINTS + "\n" + db_string + "\n" + prompts.TASK_CONSTRAINTS
+        initial_prompt = prompts.INTRO_CONSTRAINTS + "\n" + db_string + "\n" + prompts.TASK_CONSTRAINTS
         message_list = [{
             "role": "user",
-            "content": [{"text": prompt}],
+            "content": [{"text": initial_prompt}],
         }]
 
     else:
 
-        message = get_few_shot_prompt(valid_constraints, invalid_constraints)
+        few_shot_message = get_few_shot_prompt(valid_constraints, invalid_constraints)
         
-        prompt += "\n" + message
+        prompt = initial_prompt + "\n" + few_shot_message
 
         message_list = [{
             "role": "user",
@@ -49,10 +42,15 @@ def generate_constraints(n_constraints, prompt, db_json, MODEL_ID, bedrock,
 
     output = json.loads(output)
 
-    return output, prompt
+    return output, initial_prompt
 
-
-
+def get_few_shot_prompt(valid_constraints, invalid_constraints):
+    prompt = ""
+    for constraint in valid_constraints:
+        prompt += prompts.VALID_CONSTRAINTS + "\n" + json.dumps(constraint) + "\n"
+    for constraint in invalid_constraints:
+        prompt += prompts.INVALID_CONSTRAINTS + "\n" + json.dumps(constraint) + "\n"
+    return prompt
 
 
 if __name__ == "__main__":
