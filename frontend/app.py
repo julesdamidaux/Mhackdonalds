@@ -195,7 +195,7 @@ def display_execution_section():
     st.title("💻 Requêtes SQL générées")
     # On suppose que create_sql_request() prend les contraintes validées et renvoie une liste de dictionnaires,
     # chaque dictionnaire contenant les clés 'description' et 'sql'
-    sql_queries = create_sql_request(MODEL_ID, bedrock, st.session_state["validated_constraints"])
+    sql_queries = create_sql_request(MODEL_ID, bedrock, st.session_state["validated_constraints"],st.session_state["db_json"])
     st.markdown("### Voici les requêtes SQL générées :")
     for query in sql_queries:
         st.markdown(f"- **Description** : {query['description']}\n\n```sql\n{query['sql']}\n```")
@@ -209,15 +209,10 @@ def display_execution_section():
         executed_json_file = os.path.join(results_folder, "executed_queries.json")
         with open(executed_json_file, "w", encoding="utf-8") as f:
             json.dump(executed_queries, f, indent=4, ensure_ascii=False)
-        results_json_file = os.path.join(results_folder, "results_queries.json")
+        results_json_file = os.path.join(results_folder, "results_queries.txt")
         with open(results_json_file, "w", encoding="utf-8") as f:
-            json.dump(results_queries, f, indent=4, ensure_ascii=False)
+            f.write(str(results_queries))
         st.markdown("Les résultats ont été sauvegardés dans le dossier `results`.")
-
-    if st.button("Retry Exécution"):
-        # Appeler la fonction retry_execute_sql_from_request et afficher le feedback
-        feedback = retry_execute_sql_from_request(results_queries)
-        st.error(f"Erreur lors du retry : {feedback}")
 
     if st.button("Retour à la validation des contraintes"):
         st.session_state["execution_phase"] = False

@@ -6,7 +6,7 @@ import sys
 
 from credentials import region_name, aws_access_key_id, aws_secret_access_key
 
-def create_sql_request(MODEL_ID,bedrock,input_data):
+def create_sql_request(MODEL_ID,bedrock,input_data,db_json):
     
     def prompt(constraint):
         description = constraint['description']
@@ -15,16 +15,26 @@ def create_sql_request(MODEL_ID,bedrock,input_data):
         
         res = f"""I need to create a read-only SQL validation query for this constraint:
         
-        Related Tables: {tables}
-        Involved Columns: {columns}
+        Involved Tables to use in the SQL query: {tables}
+        Involved Columns in the SQL query : {columns}
         Constraint Description: {description}
 
         The query must:
         1. Code the constraint in SQL (MOST IMPORTANT)
         2. Use SELECT with READ-only permissions
-        3. Return problematic records if any
+        3. Use only columns and tables that you can infer from above
 
-        Expected output format:
+        Never try to use table or column names that are not present in the Database Schema.
+        Database Schema:
+        """
+        res += "\n" + json.dumps(db_json) + "\n"
+        return res
+
+    system_prompt = """Generate exclusively a JSON object with:
+    - description: A clear and concise reformulation of the constraint
+    - request: A SELECT validation query that checks referential integrity
+     
+    - Expected output format:
         ```json
         {{
             "description": "Concise constraint description",
@@ -37,21 +47,7 @@ def create_sql_request(MODEL_ID,bedrock,input_data):
         - Escape all double quotes (") inside the SQL query with a backslash (\\")
         - Ensure the SQL query is a single-line string inside the JSON
         - Do not include any markdown syntax (e.g., ```json or ```)
-        - Ensure the JSON is valid and can be parsed directly
-        """
-
-        return res
-
-    system_prompt = """Generate exclusively a JSON object with:
-    - description: A clear and concise reformulation of the constraint
-    - request: A SELECT validation query that checks referential integrity
-
-    - Expected output format:
-        ```json
-        {{
-            "description": "Concise constraint description",
-            "request": "Your validation SQL query here, with escaped newlines (\\n) and no unescaped double quotes"
-        }}"""
+        - Ensure the JSON is valid and can be parsed directly"""
 
 
     # Traduire les requêtes
