@@ -2,11 +2,12 @@ import json
 import boto3
 import sqlite3
 
+
 # Chemin vers le fichier JSON contenant les queries traduites
 file_path = 'translated_queries.json'
 
 #lien de la database
-db_path='database.db'
+db_path='veolia_data_duplicate.db'
 
 # Lire le contenu du fichier JSON
 with open(file_path, 'r') as file:
@@ -46,7 +47,7 @@ for request in data:
 
     except sqlite3.Error as e:
         # Afficher un message d'erreur
-        status=e
+        status=str(e)
         print(f"Erreur lors de l'exécution de la requête : {e}")
 
     finally:
