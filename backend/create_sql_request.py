@@ -9,23 +9,55 @@ def create_sql_request(MODEL_ID,bedrock,input_data):
         description = constraint['description']
         columns = constraint['columns']
         tables = constraint['tables']
-        res=f""" J'ai liste contraintes pour faire requête SQL : \n
-        Nom tables : {tables} \n
-        Nom colonnes : {columns} \n
-        description requete SQL: {description} \n\n
+        
+        res = f"""I need to create a read-only SQL validation query for this constraint:
+        
+        Related Tables: {tables}
+        Involved Columns: {columns}
+        Constraint Description: {description}
 
+        The query must:
+        1. Check referential integrity between tables
+        2. Use SELECT with READ-only permissions
+        3. Return problematic records if any
+        4. Use explicit table aliases
+        5. Include relevant columns for analysis
+
+        Expected output format:
         ```json
-        "description
-        "request":
+        {{
+            "description": "Concise constraint description",
+            "request": "Your validation SQL query here, with escaped newlines (\\n) and no unescaped double quotes"
+        }}
+        ```
+
+        Rules for the SQL query:
+        - Replace all newlines with \\n
+        - Escape all double quotes (") inside the SQL query with a backslash (\\")
+        - Ensure the SQL query is a single-line string inside the JSON
+        - Do not include any markdown syntax (e.g., ```json or ```)
+        - Ensure the JSON is valid and can be parsed directly
         """
+
         return res
 
-    system_prompt='''return only a json type object with the following columns: \n
+    system_prompt = """Generate exclusively a JSON object with:
+    - description: A clear and concise reformulation of the constraint
+    - request: A SELECT validation query that checks referential integrity
 
-        -description: description of the constraint \n
-        -request: SQL query \n
+    The query must:
+    - Use explicit joins (e.g., LEFT JOIN, INNER JOIN)
+    - Check column consistency between tables
+    - Identify potential mismatches or orphaned records
+    - Be executable as read-only
+    - Be formatted as a single-line string with escaped newlines (\\n) and escaped double quotes (\\")
 
-    '''
+    Example of valid output:
+    ```json
+    {
+        "description": "Validates that all cle_abonnement values in factures table exist in abonnements table, identifying orphaned records that violate referential integrity",
+        "request": "SELECT f.cle_abonnement as facture_cle, f.id as facture_id, a.cle_abonnement as abonnement_existant FROM factures f LEFT JOIN abonnements a ON f.cle_abonnement = a.cle_abonnement WHERE a.cle_abonnement IS NULL"
+    }"""
 
 
     # Traduire les requêtes
@@ -81,7 +113,6 @@ def create_sql_request(MODEL_ID,bedrock,input_data):
             'description': description,
             'sql': translated_text
         })
-    print(translated_queries)
 
     return translated_queries
 

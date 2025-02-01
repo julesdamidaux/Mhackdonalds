@@ -4,6 +4,7 @@ import os
 import sqlite3
 import sys
 import boto3
+import csv
 
 # Ajouter le chemin vers le dossier backend
 dossier_source = os.path.join(os.path.dirname(__file__), "..", "backend")
@@ -13,6 +14,7 @@ from find_constraints import generate_constraints
 from create_database_json_from_database import get_database_json_from_database
 from create_sql_request import create_sql_request  # Fonction qui calcule les requêtes SQL à partir des contraintes validées
 from fill_metadatas import fill_metadatas
+from execute_sql import execute_sql_from_request
 
 MODEL_ID = "anthropic.claude-3-5-sonnet-20241022-v2:0" 
 
@@ -205,6 +207,33 @@ def display_execution_section():
         # Exécute les requêtes SQL proposées grâce à la fonction execute_sql_from_request
         executed_queries, results_queries = execute_sql_from_request(st.session_state['db_name'], sql_queries)
         st.success("✅ Requêtes exécutées avec succès !")
+        results_folder = "results"
+        os.makedirs(results_folder, exist_ok=True)
+
+        # Conversion de executed_queries en CSV
+        executed_csv_file = os.path.join(results_folder, "executed_queries.csv")
+        with open(executed_csv_file, "w", newline="", encoding="utf-8") as csvfile:
+            fieldnames = ["description", "sql", "executed"]
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            for row in executed_queries:
+                writer.writerow(row)
+
+        print(f"Le fichier '{executed_csv_file}' a été généré avec succès.")
+
+        # Conversion de results_queries en CSV
+        results_csv_file = os.path.join(results_folder, "results_queries.csv")
+        with open(results_csv_file, "w", newline="", encoding="utf-8") as csvfile:
+            writer = csv.writer(csvfile)
+            # Pour chaque contrainte, écrire d'abord sa description puis les résultats
+            for query in results_queries:
+                description = query.get("description", "Pas de description")
+                writer.writerow([f"Description: {description}"])
+                for row in query.get("results", []):
+                    writer.writerow(row)
+                writer.writerow([])  # Ligne vide pour séparer les contraintes
+
+        print(f"Le fichier '{results_csv_file}' a été généré avec succès.")
 
     if st.button("Retour à la validation des contraintes"):
         st.session_state["execution_phase"] = False
