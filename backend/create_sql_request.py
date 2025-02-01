@@ -1,7 +1,10 @@
 import json
 import boto3
-from credentials import region_name, aws_access_key_id, aws_secret_access_key
 
+import os
+import sys
+
+from credentials import region_name, aws_access_key_id, aws_secret_access_key
 
 def create_sql_request(MODEL_ID,bedrock,input_data):
     
@@ -17,11 +20,9 @@ def create_sql_request(MODEL_ID,bedrock,input_data):
         Constraint Description: {description}
 
         The query must:
-        1. Check referential integrity between tables
+        1. Code the constraint in SQL (MOST IMPORTANT)
         2. Use SELECT with READ-only permissions
         3. Return problematic records if any
-        4. Use explicit table aliases
-        5. Include relevant columns for analysis
 
         Expected output format:
         ```json
@@ -45,19 +46,12 @@ def create_sql_request(MODEL_ID,bedrock,input_data):
     - description: A clear and concise reformulation of the constraint
     - request: A SELECT validation query that checks referential integrity
 
-    The query must:
-    - Use explicit joins (e.g., LEFT JOIN, INNER JOIN)
-    - Check column consistency between tables
-    - Identify potential mismatches or orphaned records
-    - Be executable as read-only
-    - Be formatted as a single-line string with escaped newlines (\\n) and escaped double quotes (\\")
-
-    Example of valid output:
-    ```json
-    {
-        "description": "Validates that all cle_abonnement values in factures table exist in abonnements table, identifying orphaned records that violate referential integrity",
-        "request": "SELECT f.cle_abonnement as facture_cle, f.id as facture_id, a.cle_abonnement as abonnement_existant FROM factures f LEFT JOIN abonnements a ON f.cle_abonnement = a.cle_abonnement WHERE a.cle_abonnement IS NULL"
-    }"""
+    - Expected output format:
+        ```json
+        {{
+            "description": "Concise constraint description",
+            "request": "Your validation SQL query here, with escaped newlines (\\n) and no unescaped double quotes"
+        }}"""
 
 
     # Traduire les requêtes
