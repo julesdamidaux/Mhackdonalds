@@ -5,37 +5,37 @@ from credentials import region_name, aws_access_key_id, aws_secret_access_key
 
 def create_sql_request(MODEL_ID,bedrock,input_data):
     
-        def prompt(constraint):
-            description = constraint['description']
-            columns = constraint['columns']
-            tables = constraint['tables']
-            res=f''' J'ai liste contraintes pour faire requête SQL : \n
-            Nom tables : {tables} \n
-            Nom colonnes : {columns} \n
-            description requete SQL: {description} \n\n
+    def prompt(constraint):
+        description = constraint['description']
+        columns = constraint['columns']
+        tables = constraint['tables']
+        res=f""" J'ai liste contraintes pour faire requête SQL : \n
+        Nom tables : {tables} \n
+        Nom colonnes : {columns} \n
+        description requete SQL: {description} \n\n
 
-            
-            "description
-            "request":
-            '''
-            return res
+        ```json
+        "description
+        "request":
+        """
+        return res
 
-        system_prompt='''return only a json type object with the following columns: \n
+    system_prompt='''return only a json type object with the following columns: \n
 
-            -description: description of the constraint \n
-            -request: SQL query \n
+        -description: description of the constraint \n
+        -request: SQL query \n
 
-        '''
+    '''
 
 
-        # Traduire les requêtes
-        translated_queries = []
-        for constraint in input_data['constraints']:
-            input_text = constraint['description']
-            
-            # Préparer le payload pour l'API Bedrock
+    # Traduire les requêtes
+    translated_queries = []
+    for constraint in input_data:
+        input_text = constraint['description']
+        
+        # Préparer le payload pour l'API Bedrock
 
-            # Configuration du système
+        # Configuration du système
         system=[
             { "text": system_prompt}
         ],
@@ -69,7 +69,7 @@ def create_sql_request(MODEL_ID,bedrock,input_data):
 
         # Lire la réponse du modèle
         response_message = response['output']['message']['content'][0]
-        json_response_message=json.loads(response_message['text'][7:-3].strip())
+        json_response_message=json.loads(response_message['text'])
         # print(response_message)
         # print(json.dumps(response_message, indent=4))
         
@@ -81,8 +81,9 @@ def create_sql_request(MODEL_ID,bedrock,input_data):
             'description': description,
             'sql': translated_text
         })
+    print(translated_queries)
 
-        return translated_queries
+    return translated_queries
 
 
 
