@@ -29,6 +29,6 @@ pip install -r requirements.txt
 mkdir data
 
 # Démarrer le frontend
-cd ../frontend
-python app.py
+
+streamlite run frontend/app.py
 
