@@ -22,6 +22,8 @@ git clone https://github.com/julesdamidaux/Mhackdonalds.git
 cd Mhackdonalds
 pip install -r requirements.txt
 
+#Prepare le dossier de la database et mettre les csv dedans
+mkdir data
 
 # Démarrer le backend
 cd backend
@@ -30,3 +32,4 @@ python main.py
 # Démarrer le frontend
 cd ../frontend
 python app.py
+
