@@ -2,6 +2,7 @@ import json
 import boto3
 from credentials import region_name, aws_access_key_id, aws_secret_access_key
 
+
 # Initialiser le client Bedrock
 bedrock = boto3.client(
     "bedrock-runtime",
