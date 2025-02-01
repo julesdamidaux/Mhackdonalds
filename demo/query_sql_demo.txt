@@ -9,3 +9,51 @@ SELECT id_abonnement,
 FROM abonnements
 WHERE date_resiliation_abonnement IS NOT NULL
   AND date_resiliation_abonnement <= date_entree_local_abonnement
+
+
+    escription : Verify that the previous index reading date is strictly earlier than the current reading date in factures table
+
+SELECT *
+FROM factures
+WHERE date_releve_index_precedent_facture_composite >= date_releve_index_facture
+AND date_releve_index_precedent_facture_composite IS NOT NULL
+AND date_releve_index_facture IS NOT NULL
+ORDER BY date_releve_index_facture
+
+    Description : When type_abaque is 'INACTIF', volume_mois must be equal to 0
+
+SELECT *
+FROM consos
+WHERE type_abaque = 'INACTIF'
+AND volume_mois != 0
+
+    Description : When a subscription has a cancellation date, it must be later than the subscription date
+
+SELECT id_abonnement, date_souscription_abonnement, date_resiliation_abonnement
+FROM abonnements
+WHERE date_resiliation_abonnement IS NOT NULL
+AND date_resiliation_abonnement <= date_souscription_abonnement;
+
+    Description : Verify that the previous index reading date is strictly before the current index reading date in factures table
+
+SELECT id,
+       date_releve_index_precedent_facture_composite,
+       date_releve_index_facture
+FROM factures
+WHERE date_releve_index_precedent_facture_composite >= date_releve_index_facture
+  AND date_releve_index_precedent_facture_composite IS NOT NULL
+  AND date_releve_index_facture IS NOT NULL
+
+    Description : When type_abaque is 'INACTIF', volume_mois must be 0
+
+SELECT *
+FROM consos
+WHERE type_abaque = 'INACTIF'
+AND volume_mois != 0
+
+    Description : When a subscription cancellation date exists, it must be later than the subscription start date
+
+SELECT *
+FROM abonnements
+WHERE date_resiliation_abonnement IS NOT NULL
+AND date_resiliation_abonnement < date_souscription_abonnement
