@@ -1,41 +1,67 @@
 import json
 import boto3
-from credentials import region_name, aws_access_key_id, aws_secret_access_key
 
+import os
+import sys
+
+from credentials import region_name, aws_access_key_id, aws_secret_access_key
 
 def create_sql_request(MODEL_ID,bedrock,input_data):
     
-        def prompt(constraint):
-            description = constraint['description']
-            columns = constraint['columns']
-            tables = constraint['tables']
-            res=f''' J'ai liste contraintes pour faire requête SQL : \n
-            Nom tables : {tables} \n
-            Nom colonnes : {columns} \n
-            description requete SQL: {description} \n\n
+    def prompt(constraint):
+        description = constraint['description']
+        columns = constraint['columns']
+        tables = constraint['tables']
+        
+        res = f"""I need to create a read-only SQL validation query for this constraint:
+        
+        Related Tables: {tables}
+        Involved Columns: {columns}
+        Constraint Description: {description}
 
-            
-            "description
-            "request":
-            '''
-            return res
+        The query must:
+        1. Code the constraint in SQL (MOST IMPORTANT)
+        2. Use SELECT with READ-only permissions
+        3. Return problematic records if any
 
-        system_prompt='''return only a json type object with the following columns: \n
+        Expected output format:
+        ```json
+        {{
+            "description": "Concise constraint description",
+            "request": "Your validation SQL query here, with escaped newlines (\\n) and no unescaped double quotes"
+        }}
+        ```
 
-            -description: description of the constraint \n
-            -request: SQL query \n
+        Rules for the SQL query:
+        - Replace all newlines with \\n
+        - Escape all double quotes (") inside the SQL query with a backslash (\\")
+        - Ensure the SQL query is a single-line string inside the JSON
+        - Do not include any markdown syntax (e.g., ```json or ```)
+        - Ensure the JSON is valid and can be parsed directly
+        """
 
-        '''
+        return res
+
+    system_prompt = """Generate exclusively a JSON object with:
+    - description: A clear and concise reformulation of the constraint
+    - request: A SELECT validation query that checks referential integrity
+
+    - Expected output format:
+        ```json
+        {{
+            "description": "Concise constraint description",
+            "request": "Your validation SQL query here, with escaped newlines (\\n) and no unescaped double quotes"
+        }}"""
 
 
-        # Traduire les requêtes
-        translated_queries = []
-        for constraint in input_data['constraints']:
-            input_text = constraint['description']
-            
-            # Préparer le payload pour l'API Bedrock
+    # Traduire les requêtes
+    translated_queries = []
+    for constraint in input_data:
+        input_text = constraint['description']
+        
+        # Préparer le payload pour l'API Bedrock
 
-            # Configuration du système
+        # Configuration du système
         system=[
             { "text": system_prompt}
         ],
@@ -69,7 +95,7 @@ def create_sql_request(MODEL_ID,bedrock,input_data):
 
         # Lire la réponse du modèle
         response_message = response['output']['message']['content'][0]
-        json_response_message=json.loads(response_message['text'][7:-3].strip())
+        json_response_message=json.loads(response_message['text'])
         # print(response_message)
         # print(json.dumps(response_message, indent=4))
         
@@ -82,7 +108,7 @@ def create_sql_request(MODEL_ID,bedrock,input_data):
             'sql': translated_text
         })
 
-        return translated_queries
+    return translated_queries
 
 
 

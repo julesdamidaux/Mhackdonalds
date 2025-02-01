@@ -1,0 +1,11 @@
+SELECT *
+FROM consos
+WHERE volume_mois < 0
+ORDER BY volume_mois ASC
+
+SELECT id_abonnement,
+       date_entree_local_abonnement,
+       date_resiliation_abonnement
+FROM abonnements
+WHERE date_resiliation_abonnement IS NOT NULL
+  AND date_resiliation_abonnement <= date_entree_local_abonnement
