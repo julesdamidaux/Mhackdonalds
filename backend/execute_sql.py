@@ -14,8 +14,8 @@ def execute_sql_from_request(db_name,data):
         sql_request = request['sql']
         status=True
         new_sql_request = sql_request.replace('veolia-data-', '')  #supprimer le préfixe veolia-data- car table enregistrée sans préfixe
-        print("SQL REQUEST")
-        print(new_sql_request)
+        #print("SQL REQUEST")
+        #print(new_sql_request)
         # Se connecter à la base de données SQLite
         with open("credentials_redshift.json", "r", encoding="utf-8") as f:
             config = json.load(f)
@@ -47,7 +47,7 @@ def execute_sql_from_request(db_name,data):
 
         try:
         
-            print("try")
+            #print("try")
             # Exécuter la requête SQL
             cursor.execute(new_sql_request)
 

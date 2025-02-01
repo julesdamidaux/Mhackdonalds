@@ -33,6 +33,7 @@ FORMAT_METADATA = """## Strict Response Requirements ##
 4. No additional text or formatting outside the JSON
 
 Response must begin with: {"""
+
 #################################### PROMPTS FOR CONSTRAINTS TASK ####################################
 
 INTRO_CONSTRAINTS = """Analyze the following database schema to identify data quality constraints. Consider these aspects:
@@ -55,7 +56,7 @@ Include for each constraint:
 1. Constraint type and Description of the rule
 2. Affected columns/tables
 
-ever try to use table or column names that are not present in the Database Schema."""
+Never try to use table or column names that are not present in the Database Schema."""
 
 VALID_CONSTRAINTS = """# Valid Data Quality Constraint Example"""
 
@@ -63,7 +64,7 @@ INVALID_CONSTRAINTS = """# Invalid Constraint Example ❌"""
 
 
 def get_format_constraints(n):
-    return """Generate a JSON object containing exactly {n} constraints following this structure:
+    return f"Generate a JSON object containing exactly {n}" + """ constraints following this structure:
 {
     "constraints": [
         {
