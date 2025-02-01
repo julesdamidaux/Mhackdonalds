@@ -1,0 +1,121 @@
+{
+    "factures": {
+        "CLE_ABONNEMENT": {
+            "column_names": "CLE_ABONNEMENT",
+            "column_description": "",
+            "type": "STRING"
+        },
+        "CLE_FACTURE": {
+            "column_names": "CLE_FACTURE",
+            "column_description": "",
+            "type": "STRING"
+        },
+        "DATE_EMISSION_FACTURE": {
+            "column_names": "DATE_EMISSION_FACTURE",
+            "column_description": "",
+            "type": "DATE"
+        },
+        "CONSO_FACTURE": {
+            "column_names": "CONSO_FACTURE",
+            "column_description": "",
+            "type": "FLOAT"
+        },
+        "DATE_RELEVE_INDEX_PRECEDENT_FACTURE_COMPOSITE": {
+            "column_names": "DATE_RELEVE_INDEX_PRECEDENT_FACTURE_COMPOSITE",
+            "column_description": "",
+            "type": "DATE"
+        },
+        "DATE_RELEVE_INDEX_FACTURE": {
+            "column_names": "DATE_RELEVE_INDEX_FACTURE",
+            "column_description": "",
+            "type": "DATE"
+        },
+        "NB_FACTURES_PAR_PDS": {
+            "column_names": "NB_FACTURES_PAR_PDS",
+            "column_description": "",
+            "type": "INTEGER"
+        },
+        "NB_JOURS_CONNUS": {
+            "column_names": "NB_JOURS_CONNUS",
+            "column_description": "",
+            "type": "INTEGER"
+        },
+        "NUM_FAC_PAR_PDS": {
+            "column_names": "NUM_FAC_PAR_PDS",
+            "column_description": "",
+            "type": "INTEGER"
+        }},
+    "consos": {
+        "CLE_PDS": {
+            "column_names": "CLE_PDS",
+            "column_description": "",
+            "type": "STRING"
+        },
+        "LIBELLE_REGION": {
+            "column_names": "LIBELLE_REGION",
+            "column_description": "",
+            "type": "STRING"
+        },
+        "LIBELLE_TERRITOIRE": {
+            "column_names": "LIBELLE_TERRITOIRE",
+            "column_description": "",
+            "type": "STRING"
+        },
+        "CODE_CONTRAT": {
+            "column_names": "CODE_CONTRAT",
+            "column_description": "",
+            "type": "STRING"
+        },
+        "LIBELLE_CATEGORIE_ABONNE": {
+            "column_names": "LIBELLE_CATEGORIE_ABONNE",
+            "column_description": "",
+            "type": "STRING"
+        },
+        "DIAMETRE_NOMINAL": {
+            "column_names": "DIAMETRE_NOMINAL",
+            "column_description": "",
+            "type": "FLOAT"
+        },
+        "TYPE_ABAQUE": {
+            "column_names": "TYPE_ABAQUE",
+            "column_description": "",
+            "type": "STRING"
+        },
+        "MOIS_CONSO": {
+            "column_names": "MOIS_CONSO",
+            "column_description": "",
+            "type": "INTEGER"
+        },
+        "ANNEE_CONSO": {
+            "column_names": "ANNEE_CONSO",
+            "column_description": "",
+            "type": "INTEGER"
+        },
+        "DATE_CONSO_MOIS": {
+            "column_names": "DATE_CONSO_MOIS",
+            "column_description": "",
+            "type": "DATE"
+        },
+        "VOLUME_MOIS": {
+            "column_names": "VOLUME_MOIS",
+            "column_description": "",
+            "type": "FLOAT"
+        }},
+    "abonnements": {
+        "DATE_ENTREE_LOCAL_ABONNEMENT": {
+            "column_names": "DATE_ENTREE_LOCAL_ABONNEMENT",
+            "column_description": "",
+            "type": "DATE"
+        },
+        "DATE_SOUSCRIPTION_ABONNEMENT": {
+            "column_names": "DATE_SOUSCRIPTION_ABONNEMENT",
+            "column_description": "",
+            "type": "DATE"
+        },
+        "DATE_RESILIATION_ABONNEMENT": {
+            "column_names": "DATE_RESILIATION_ABONNEMENT",
+            "column_description": "",
+            "type": "DATE"
+        }
+    }
+}

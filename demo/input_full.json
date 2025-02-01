@@ -1,0 +1,121 @@
+{
+    "factures": {
+        "CLE_ABONNEMENT": {
+            "column_names": "CLE_ABONNEMENT",
+            "column_description": "Identifiant de l'abonné",
+            "type": "STRING"
+        },
+        "CLE_FACTURE": {
+            "column_names": "CLE_FACTURE",
+            "column_description": "Identifiant de la facture. Plusieurs factures peuvent être associées à un même abonné.",
+            "type": "STRING"
+        },
+        "DATE_EMISSION_FACTURE": {
+            "column_names": "DATE_EMISSION_FACTURE",
+            "column_description": "Date d'émission de la facture",
+            "type": "DATE"
+        },
+        "CONSO_FACTURE": {
+            "column_names": "CONSO_FACTURE",
+            "column_description": "La consommation qui apparaît dans la facture, qui est facturée au consommateur",
+            "type": "FLOAT"
+        },
+        "DATE_RELEVE_INDEX_PRECEDENT_FACTURE_COMPOSITE": {
+            "column_names": "DATE_RELEVE_INDEX_PRECEDENT_FACTURE_COMPOSITE",
+            "column_description": "La consommation d'une facture se calcule par la différence d'un index. L'index 'd'aujourd'hui' moins l'index 'd'hier'. Ici il s'agit de la date de relevé de l'index le plus ancien ayant servi au calcul de la consommation.",
+            "type": "DATE"
+        },
+        "DATE_RELEVE_INDEX_FACTURE": {
+            "column_names": "DATE_RELEVE_INDEX_FACTURE",
+            "column_description": "Date de relevé de l'index le plus récent ayant servi au calcul de la consommation.",
+            "type": "DATE"
+        },
+        "NB_FACTURES_PAR_PDS": {
+            "column_names": "NB_FACTURES_PAR_PDS",
+            "column_description": "Le nombre de factures par point de service.",
+            "type": "INTEGER"
+        },
+        "NB_JOURS_CONNUS": {
+            "column_names": "NB_JOURS_CONNUS",
+            "column_description": "Le nombre de jours connus sur la facture (correspond normalement à la date de relevé index facture moins la date de relevé de l'index précédent)",
+            "type": "INTEGER"
+        },
+        "NUM_FAC_PAR_PDS": {
+            "column_names": "NUM_FAC_PAR_PDS",
+            "column_description": "L'ordre de la facture par point de service (1ère facture, 2ème facture, ...)",
+            "type": "INTEGER"
+        }},
+    "consos": {
+        "CLE_PDS": {
+            "column_names": "CLE_PDS",
+            "column_description": "L'identifiant du point de livraison. Le PDS se trouve dans l'identifiant abonnement.",
+            "type": "STRING"
+        },
+        "LIBELLE_REGION": {
+            "column_names": "LIBELLE_REGION",
+            "column_description": "La région d'appartenance au point de livraison",
+            "type": "STRING"
+        },
+        "LIBELLE_TERRITOIRE": {
+            "column_names": "LIBELLE_TERRITOIRE",
+            "column_description": "Le territoire d'appartenance au point de livraison",
+            "type": "STRING"
+        },
+        "CODE_CONTRAT": {
+            "column_names": "CODE_CONTRAT",
+            "column_description": "Le code du contrat de délégation de service public auquel est associé le point de livraison",
+            "type": "STRING"
+        },
+        "LIBELLE_CATEGORIE_ABONNE": {
+            "column_names": "LIBELLE_CATEGORIE_ABONNE",
+            "column_description": "La catégorie de l'abonné (bâtiment collectif public / privé, industriel, professionnel, ...)",
+            "type": "STRING"
+        },
+        "DIAMETRE_NOMINAL": {
+            "column_names": "DIAMETRE_NOMINAL",
+            "column_description": "Le diamètre nominal du compteur (plus le compteur est gros, plus la consommation doit être élevée)",
+            "type": "FLOAT"
+        },
+        "TYPE_ABAQUE": {
+            "column_names": "TYPE_ABAQUE",
+            "column_description": "Le type de méthode qui nous a permis de calculer la consommation (est-on sur du ML, sur du télérelevé, ...)",
+            "type": "STRING"
+        },
+        "MOIS_CONSO": {
+            "column_names": "MOIS_CONSO",
+            "column_description": "Le mois concerné par la consommation",
+            "type": "INTEGER"
+        },
+        "ANNEE_CONSO": {
+            "column_names": "ANNEE_CONSO",
+            "column_description": "L'année de la consommation",
+            "type": "INTEGER"
+        },
+        "DATE_CONSO_MOIS": {
+            "column_names": "DATE_CONSO_MOIS",
+            "column_description": "La date liée à la consommation",
+            "type": "DATE"
+        },
+        "VOLUME_MOIS": {
+            "column_names": "VOLUME_MOIS",
+            "column_description": "Le volume consommé sur le mois / année en question",
+            "type": "FLOAT"
+        }},
+    "abonnements": {
+        "DATE_ENTREE_LOCAL_ABONNEMENT": {
+            "column_names": "DATE_ENTREE_LOCAL_ABONNEMENT",
+            "column_description": "La date d'entrée de l'abonné dans le logement",
+            "type": "DATE"
+        },
+        "DATE_SOUSCRIPTION_ABONNEMENT": {
+            "column_names": "DATE_SOUSCRIPTION_ABONNEMENT",
+            "column_description": "La date à laquelle l'abonné a souscrit un abonnement",
+            "type": "DATE"
+        },
+        "DATE_RESILIATION_ABONNEMENT": {
+            "column_names": "DATE_RESILIATION_ABONNEMENT",
+            "column_description": "La date de résiliation de l'abonné. Quand l'abonné est hors d'une période active (entre souscription et résiliation), il ne doit pas y avoir de consommations.",
+            "type": "DATE"
+        }
+    }
+}
