@@ -102,7 +102,7 @@ for constraint in input_data['constraints']:
 
     # Ajouter la requête traduite à la liste
     translated_queries.append({
-        'desription': description,
+        'description': description,
         'sql': translated_text
     })
 
