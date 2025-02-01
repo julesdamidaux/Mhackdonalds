@@ -67,7 +67,7 @@ def retry_execute_sql_from_request(data):
 
         # Lire la réponse du modèle
         response_message = response['output']['message']['content'][0]
-        json_response_message=json.loads(response_message['text'][7:-3].strip())
+        json_response_message=json.loads(response_message['text'])
         
         description=json_response_message['description']
         translated_text=json_response_message['request']

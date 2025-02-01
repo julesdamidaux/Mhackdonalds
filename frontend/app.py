@@ -10,10 +10,11 @@ import csv
 dossier_source = os.path.join(os.path.dirname(__file__), "..", "backend")
 sys.path.append(dossier_source)
 
-from find_constraints import generate_constraints
+from find_constraints_deepseek import generate_constraints
 from create_database_json_from_database import get_database_json_from_database
 from create_sql_request import create_sql_request  # Fonction qui calcule les requêtes SQL à partir des contraintes validées
 from fill_metadatas import fill_metadatas
+from retry_execute_sql import retry_execute_sql_from_request
 from execute_sql import execute_sql_from_request
 
 MODEL_ID = "anthropic.claude-3-5-sonnet-20241022-v2:0" 
@@ -47,8 +48,6 @@ if "selected_constraints" not in st.session_state:
 # On stocke également les chemins des fichiers uploadés
 if "input_json_path" not in st.session_state:
     st.session_state["input_json_path"] = ""
-if "db_file" not in st.session_state:
-    st.session_state["db_file"] = ""
 if "txt_path" not in st.session_state:
     st.session_state["txt_path"] = ""
 if "db_name" not in st.session_state:
@@ -143,7 +142,6 @@ def display_upload_section():
         st.session_state["constraints"] = constraints_json.get("constraints", [])
         st.session_state["selected_constraints"] = [False] * len(st.session_state["constraints"])
 
-
 def display_constraints_generation_section():
     """Affiche la section de génération et validation des contraintes."""
     st.title("🔍 Sélectionnez les contraintes à valider")
@@ -187,7 +185,6 @@ def display_constraints_generation_section():
             st.markdown(c.get("description", "Pas de description"))
 
     if st.button("🚀 Créer les requêtes SQL"):
-        # Plutôt que d'exécuter directement dans la DB, on passe à une nouvelle "fenêtre" d'exécution
         st.session_state["execution_phase"] = True
 
     if st.button("Retour au téléversement des fichiers"):
@@ -204,36 +201,23 @@ def display_execution_section():
         st.markdown(f"- **Description** : {query['description']}\n\n```sql\n{query['sql']}\n```")
 
     if st.button("Exécuter les requêtes"):
-        # Exécute les requêtes SQL proposées grâce à la fonction execute_sql_from_request
         executed_queries, results_queries = execute_sql_from_request(st.session_state['db_name'], sql_queries)
         st.success("✅ Requêtes exécutées avec succès !")
+        # Sauvegarder les résultats au format JSON dans le dossier results
         results_folder = "results"
         os.makedirs(results_folder, exist_ok=True)
+        executed_json_file = os.path.join(results_folder, "executed_queries.json")
+        with open(executed_json_file, "w", encoding="utf-8") as f:
+            json.dump(executed_queries, f, indent=4, ensure_ascii=False)
+        results_json_file = os.path.join(results_folder, "results_queries.json")
+        with open(results_json_file, "w", encoding="utf-8") as f:
+            json.dump(results_queries, f, indent=4, ensure_ascii=False)
+        st.markdown("Les résultats ont été sauvegardés dans le dossier `results`.")
 
-        # Conversion de executed_queries en CSV
-        executed_csv_file = os.path.join(results_folder, "executed_queries.csv")
-        with open(executed_csv_file, "w", newline="", encoding="utf-8") as csvfile:
-            fieldnames = ["description", "sql", "executed"]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
-            for row in executed_queries:
-                writer.writerow(row)
-
-        print(f"Le fichier '{executed_csv_file}' a été généré avec succès.")
-
-        # Conversion de results_queries en CSV
-        results_csv_file = os.path.join(results_folder, "results_queries.csv")
-        with open(results_csv_file, "w", newline="", encoding="utf-8") as csvfile:
-            writer = csv.writer(csvfile)
-            # Pour chaque contrainte, écrire d'abord sa description puis les résultats
-            for query in results_queries:
-                description = query.get("description", "Pas de description")
-                writer.writerow([f"Description: {description}"])
-                for row in query.get("results", []):
-                    writer.writerow(row)
-                writer.writerow([])  # Ligne vide pour séparer les contraintes
-
-        print(f"Le fichier '{results_csv_file}' a été généré avec succès.")
+    if st.button("Retry Exécution"):
+        # Appeler la fonction retry_execute_sql_from_request et afficher le feedback
+        feedback = retry_execute_sql_from_request(results_queries)
+        st.error(f"Erreur lors du retry : {feedback}")
 
     if st.button("Retour à la validation des contraintes"):
         st.session_state["execution_phase"] = False
