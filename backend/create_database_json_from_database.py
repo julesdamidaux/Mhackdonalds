@@ -45,13 +45,44 @@ La structure du JSON output est la suivante:
 
 import sqlite3
 import json
+import boto3
+import redshift_connector
+from datetime import date
 
 
+def serialize_date(obj):
+    if isinstance(obj, date):
+        return obj.isoformat()  # Convertit en format 'YYYY-MM-DD'
+    return obj
 
-def get_database_json_from_database(db_path, contexte, input_json, save_json=False):
+def get_database_json_from_database(db_name, contexte, input_json, save_json=False):
     
+    with open("credentials_redshift.json", "r", encoding="utf-8") as f:
+        config = json.load(f)
 
-    conn = sqlite3.connect(db_path)
+    ACCESS_KEY = config.get("ACCESS_KEY")
+    SECRET_KEY = config.get("SECRET_KEY")
+
+    session = boto3.Session(
+    aws_access_key_id=ACCESS_KEY,
+    aws_secret_access_key=SECRET_KEY,
+    region_name='us-west-2'
+)
+
+    client = session.client('redshift-serverless')
+
+    response = client.get_credentials(
+        workgroupName="hackathon",
+    )
+
+    conn = redshift_connector.connect(
+        host='hackathon.302263083496.us-west-2.redshift-serverless.amazonaws.com',
+        database=db_name,
+        port=5439,
+        user=response["dbUser"],
+        password=response['dbPassword'],
+    )
+
     cursor = conn.cursor()
 
     # Dictionnaire final qui sera exporté au format JSON
@@ -60,46 +91,50 @@ def get_database_json_from_database(db_path, contexte, input_json, save_json=Fal
         "contexte": contexte
     }
 
-    # Récupération de toutes les tables de l'utilisateur (exclut les tables système)
-    cursor.execute("SELECT name, sql FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")
+    # Récupération de toutes les tables utilisateur (exclut les tables système)
+    cursor.execute("""
+        SELECT tablename
+        FROM pg_table_def
+        WHERE schemaname = 'public';
+    """)
     tables = cursor.fetchall()
 
     for table in tables:
-        table_name, create_statement = table
+        table_name = table[0]
         
+        # Récupération de la structure de la table
+        cursor.execute(f"""
+            SELECT column_name, data_type 
+            FROM information_schema.columns 
+            WHERE table_name = '{table_name}';
+        """)
+        columns_info = cursor.fetchall()
+
         # Création de la structure pour cette table
         table_dict = {
-            "create_statement": create_statement,
-            "example": []  # On va remplir la liste avec le header (noms des colonnes) et quelques exemples de lignes
+            "create_statement": f"Table {table_name} (définition non disponible via Redshift directement)",
+            "example": []
         }
-        
-        # Récupération des informations sur les colonnes via la commande PRAGMA
-        cursor.execute(f"PRAGMA table_info('{table_name}');")
-        columns_info = cursor.fetchall()  
-        # Chaque ligne de columns_info correspond à : (cid, name, type, notnull, default_value, pk)
-        
-        # Construction de la liste des noms de colonnes
-        column_names = [col[1] for col in columns_info]
-        # La première ligne de "example" est la liste des noms de colonnes
+
+        # Liste des noms de colonnes
+        column_names = [col[0] for col in columns_info]
         table_dict["example"].append(column_names)
-        
-        # Récupération de quelques lignes d'exemple (ici, 3 lignes)
-        cursor.execute(f"SELECT * FROM '{table_name}' LIMIT 3;")
+
+        # Récupération de quelques lignes d'exemple
+        cursor.execute(f"SELECT * FROM {table_name} LIMIT 5;")
         rows = cursor.fetchall()
         for row in rows:
-            # On transforme le tuple en liste pour JSON
-            table_dict["example"].append(list(row))
-        
-        # Pour chaque colonne, on ajoute un objet décrivant la colonne
+            table_dict["example"].append([serialize_date(value) for value in row])
+
+        # Ajout des détails des colonnes
         for col in columns_info:
-            col_name = col[1]
-            col_type = col[2]
+            col_name, col_type = col
             table_dict[col_name] = {
                 "column_names": col_name,
-                "column_description": "",  # Description laissée vide pour le moment
+                "column_description": "",
                 "type": col_type
             }
-        
+
         # Ajout de la table dans le dictionnaire final
         output["tables"][table_name] = table_dict
 
@@ -116,10 +151,10 @@ def get_database_json_from_database(db_path, contexte, input_json, save_json=Fal
                     if column_name in input_data[table_name]:
                         # Mettre à jour la description si elle existe dans input
                         column_info["column_description"] = input_data[table_name][column_name].get("column_description", "")
-
+    
     if save_json:
         # Sauvegarde du JSON mis à jour
-        with open("test_create_database_json/database_json.json", "w", encoding="utf-8") as f:
+        with open("backend/test_create_database_json/database_json.json", "w", encoding="utf-8") as f:
             json.dump(output, f, indent=4, ensure_ascii=False)
 
         print(f"Le fichier database_json.json a été généré avec succès.")
@@ -131,7 +166,7 @@ def get_database_json_from_database(db_path, contexte, input_json, save_json=Fal
 
 # Exemple d'utilisation
 if __name__ == "__main__":
-    db_path = "../data/veolia_data.db"
+    db_name = "dev"
     contexte = "test réussi"
-    input_json = "../data/input.json"
-    get_database_json_from_database(db_path, contexte, input_json, save_json=True)
+    input_json = "data/input.json"
+    get_database_json_from_database(db_name, contexte, input_json, save_json=True)

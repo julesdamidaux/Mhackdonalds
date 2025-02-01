@@ -1,258 +1,318 @@
 {
     "tables": {
         "abonnements": {
-            "create_statement": "CREATE TABLE \"abonnements\" (\n\"CLE_ABONNEMENT\" TEXT,\n  \"DATE_ENTREE_LOCAL_ABONNEMENT\" TEXT,\n  \"DATE_SOUSCRIPTION_ABONNEMENT\" TEXT,\n  \"DATE_RESILIATION_ABONNEMENT\" TEXT\n)",
+            "create_statement": "Table abonnements (définition non disponible via Redshift directement)",
             "example": [
                 [
-                    "CLE_ABONNEMENT",
-                    "DATE_ENTREE_LOCAL_ABONNEMENT",
-                    "DATE_SOUSCRIPTION_ABONNEMENT",
-                    "DATE_RESILIATION_ABONNEMENT"
+                    "cle_abonnement",
+                    "date_entree_local_abonnement",
+                    "date_resiliation_abonnement",
+                    "date_souscription_abonnement"
                 ],
                 [
-                    "GN_1180180100000501",
+                    "GN_1180180102884902",
+                    "1992-01-01",
                     null,
-                    null,
-                    "2003-09-16"
+                    "2022-05-13"
                 ],
                 [
-                    "GN_1180180100000506",
-                    "2014-11-19",
-                    "2014-11-25",
-                    "2015-09-10"
+                    "GN_1180280200180802",
+                    "1992-01-07",
+                    null,
+                    null
                 ],
                 [
-                    "GN_1180180100000901",
+                    "GN_1180380300246802",
+                    "1992-07-27",
                     null,
+                    null
+                ],
+                [
+                    "GN_1180880800111702",
+                    "1992-10-07",
                     null,
-                    "2003-02-21"
+                    null
+                ],
+                [
+                    "GN_1184284200150601",
+                    "1994-07-01",
+                    null,
+                    null
                 ]
             ],
-            "CLE_ABONNEMENT": {
-                "column_names": "CLE_ABONNEMENT",
+            "cle_abonnement": {
+                "column_names": "cle_abonnement",
                 "column_description": "",
-                "type": "TEXT"
+                "type": "character varying"
             },
-            "DATE_ENTREE_LOCAL_ABONNEMENT": {
-                "column_names": "DATE_ENTREE_LOCAL_ABONNEMENT",
-                "column_description": "La date d'entrée de l'abonné dans le logement",
-                "type": "TEXT"
+            "date_entree_local_abonnement": {
+                "column_names": "date_entree_local_abonnement",
+                "column_description": "",
+                "type": "date"
             },
-            "DATE_SOUSCRIPTION_ABONNEMENT": {
-                "column_names": "DATE_SOUSCRIPTION_ABONNEMENT",
-                "column_description": "La date à laquelle l'abonné a souscrit un abonnement",
-                "type": "TEXT"
+            "date_resiliation_abonnement": {
+                "column_names": "date_resiliation_abonnement",
+                "column_description": "",
+                "type": "date"
             },
-            "DATE_RESILIATION_ABONNEMENT": {
-                "column_names": "DATE_RESILIATION_ABONNEMENT",
-                "column_description": "La date de résiliation de l'abonné. Quand l'abonné est hors d'une période active (entre souscription et résiliation), il ne doit pas y avoir de consommations.",
-                "type": "TEXT"
+            "date_souscription_abonnement": {
+                "column_names": "date_souscription_abonnement",
+                "column_description": "",
+                "type": "date"
             }
         },
         "consos": {
-            "create_statement": "CREATE TABLE \"consos\" (\n\"CLE_PDS\" TEXT,\n  \"LIBELLE_REGION\" TEXT,\n  \"LIBELLE_TERRITOIRE\" TEXT,\n  \"CODE_CONTRAT\" TEXT,\n  \"LIBELLE_CATEGORIE_ABONNE\" TEXT,\n  \"DIAMETRE_NOMINAL\" REAL,\n  \"TYPE_ABAQUE\" TEXT,\n  \"MOIS_CONSO\" INTEGER,\n  \"ANNEE_CONSO\" INTEGER,\n  \"DATE_CONSO_MOIS\" TEXT,\n  \"VOLUME_MOIS\" REAL\n)",
+            "create_statement": "Table consos (définition non disponible via Redshift directement)",
             "example": [
                 [
-                    "CLE_PDS",
-                    "LIBELLE_REGION",
-                    "LIBELLE_TERRITOIRE",
-                    "CODE_CONTRAT",
-                    "LIBELLE_CATEGORIE_ABONNE",
-                    "DIAMETRE_NOMINAL",
-                    "TYPE_ABAQUE",
-                    "MOIS_CONSO",
-                    "ANNEE_CONSO",
-                    "DATE_CONSO_MOIS",
-                    "VOLUME_MOIS"
+                    "annee_conso",
+                    "mois_conso",
+                    "diametre_nominal",
+                    "volume_mois",
+                    "type_abaque",
+                    "libelle_categorie_abonne",
+                    "code_contrat",
+                    "libelle_territoire",
+                    "libelle_region",
+                    "cle_pds",
+                    "date_conso_mois"
                 ],
                 [
-                    "GN|07744010200392",
-                    "Ile de France",
-                    "Seine et Marne",
-                    "E4660",
+                    "GN|11801801045123",
+                    "Hauts de France",
+                    "Littoral Audomarois",
+                    "YU001",
+                    "BATIMENTS COLLECTIFS PRIVES",
+                    15,
+                    "ABAQUE_ML_INTERPO",
+                    9,
+                    2023,
+                    "2023-09-01",
+                    1.6007662024035785
+                ],
+                [
+                    "GN|11801801033688",
+                    "Hauts de France",
+                    "Littoral Audomarois",
+                    "YU001",
                     "PROFESSIONNELS",
-                    0.0,
-                    "INACTIF",
-                    8,
-                    2022,
-                    "2022-08-01",
+                    30,
+                    "ABAQUE_TR_INTERPO",
+                    9,
+                    2023,
+                    "2023-09-01",
                     0.0
                 ],
                 [
-                    "GN|07744010201832",
-                    "Ile de France",
-                    "Seine et Marne",
-                    "E4660",
-                    "PROFESSIONNELS",
-                    15.0,
+                    "GN|11801801038949",
+                    "Hauts de France",
+                    "Littoral Audomarois",
+                    "YU001",
+                    "APPAREILS PUBLICS COMMUNAUX",
+                    0,
                     "INACTIF",
-                    8,
-                    2022,
-                    "2022-08-01",
+                    1,
+                    2023,
+                    "2023-01-01",
                     0.0
                 ],
                 [
-                    "GN|07421002002279",
-                    "Ile de France",
-                    "Seine et Marne",
-                    "E4660",
-                    "PROFESSIONNELS",
-                    15.0,
+                    "GN|11803803011206",
+                    "Hauts de France",
+                    "Littoral Audomarois",
+                    "YU001",
+                    "BATIMENTS COLLECTIFS PUBLICS",
+                    0,
                     "INACTIF",
-                    8,
-                    2022,
-                    "2022-08-01",
+                    1,
+                    2023,
+                    "2023-01-01",
                     0.0
+                ],
+                [
+                    "GN|11801801035268",
+                    "Hauts de France",
+                    "Littoral Audomarois",
+                    "YU001",
+                    "BATIMENTS COLLECTIFS PUBLICS",
+                    0,
+                    "ABAQUE_PDS_MANQUANTS",
+                    1,
+                    2023,
+                    "2023-01-01",
+                    24.477941706386453
                 ]
             ],
-            "CLE_PDS": {
-                "column_names": "CLE_PDS",
-                "column_description": "L'identifiant du point de livraison. Le PDS se trouve dans l'identifiant abonnement.",
-                "type": "TEXT"
+            "annee_conso": {
+                "column_names": "annee_conso",
+                "column_description": "",
+                "type": "integer"
             },
-            "LIBELLE_REGION": {
-                "column_names": "LIBELLE_REGION",
-                "column_description": "La région d'appartenance au point de livraison",
-                "type": "TEXT"
+            "mois_conso": {
+                "column_names": "mois_conso",
+                "column_description": "",
+                "type": "integer"
             },
-            "LIBELLE_TERRITOIRE": {
-                "column_names": "LIBELLE_TERRITOIRE",
-                "column_description": "Le territoire d'appartenance au point de livraison",
-                "type": "TEXT"
+            "diametre_nominal": {
+                "column_names": "diametre_nominal",
+                "column_description": "",
+                "type": "integer"
             },
-            "CODE_CONTRAT": {
-                "column_names": "CODE_CONTRAT",
-                "column_description": "Le code du contrat de délégation de service public auquel est associé le point de livraison",
-                "type": "TEXT"
+            "volume_mois": {
+                "column_names": "volume_mois",
+                "column_description": "",
+                "type": "double precision"
             },
-            "LIBELLE_CATEGORIE_ABONNE": {
-                "column_names": "LIBELLE_CATEGORIE_ABONNE",
-                "column_description": "La catégorie de l'abonné (bâtiment collectif public / privé, industriel, professionnel, ...)",
-                "type": "TEXT"
+            "type_abaque": {
+                "column_names": "type_abaque",
+                "column_description": "",
+                "type": "character varying"
             },
-            "DIAMETRE_NOMINAL": {
-                "column_names": "DIAMETRE_NOMINAL",
-                "column_description": "Le diamètre nominal du compteur (plus le compteur est gros, plus la consommation doit être élevée)",
-                "type": "REAL"
+            "libelle_categorie_abonne": {
+                "column_names": "libelle_categorie_abonne",
+                "column_description": "",
+                "type": "character varying"
             },
-            "TYPE_ABAQUE": {
-                "column_names": "TYPE_ABAQUE",
-                "column_description": "Le type de méthode qui nous a permis de calculer la consommation (est-on sur du ML, sur du télérelevé, ...)",
-                "type": "TEXT"
+            "code_contrat": {
+                "column_names": "code_contrat",
+                "column_description": "",
+                "type": "character varying"
             },
-            "MOIS_CONSO": {
-                "column_names": "MOIS_CONSO",
-                "column_description": "Le mois concerné par la consommation",
-                "type": "INTEGER"
+            "libelle_territoire": {
+                "column_names": "libelle_territoire",
+                "column_description": "",
+                "type": "character varying"
             },
-            "ANNEE_CONSO": {
-                "column_names": "ANNEE_CONSO",
-                "column_description": "L'année de la consommation",
-                "type": "INTEGER"
+            "libelle_region": {
+                "column_names": "libelle_region",
+                "column_description": "",
+                "type": "character varying"
             },
-            "DATE_CONSO_MOIS": {
-                "column_names": "DATE_CONSO_MOIS",
-                "column_description": "La date liée à la consommation",
-                "type": "TEXT"
+            "cle_pds": {
+                "column_names": "cle_pds",
+                "column_description": "",
+                "type": "character varying"
             },
-            "VOLUME_MOIS": {
-                "column_names": "VOLUME_MOIS",
-                "column_description": "Le volume consommé sur le mois / année en question",
-                "type": "REAL"
+            "date_conso_mois": {
+                "column_names": "date_conso_mois",
+                "column_description": "",
+                "type": "date"
             }
         },
         "factures": {
-            "create_statement": "CREATE TABLE \"factures\" (\n\"CLE_ABONNEMENT\" TEXT,\n  \"CLE_FACTURE\" TEXT,\n  \"DATE_EMISSION_FACTURE\" TEXT,\n  \"CONSO_FACTURE\" INTEGER,\n  \"DATE_RELEVE_INDEX_PRECEDENT_FACTURE_COMPOSITE\" TEXT,\n  \"DATE_RELEVE_INDEX_FACTURE\" TEXT,\n  \"NB_FACTURES_PAR_PDS\" INTEGER,\n  \"NB_JOURS_CONNUS\" INTEGER,\n  \"NUM_FAC_PAR_PDS\" INTEGER\n)",
+            "create_statement": "Table factures (définition non disponible via Redshift directement)",
             "example": [
                 [
-                    "CLE_ABONNEMENT",
-                    "CLE_FACTURE",
-                    "DATE_EMISSION_FACTURE",
-                    "CONSO_FACTURE",
-                    "DATE_RELEVE_INDEX_PRECEDENT_FACTURE_COMPOSITE",
-                    "DATE_RELEVE_INDEX_FACTURE",
-                    "NB_FACTURES_PAR_PDS",
-                    "NB_JOURS_CONNUS",
-                    "NUM_FAC_PAR_PDS"
+                    "nb_jours_connus",
+                    "nb_factures_par_pds",
+                    "conso_facture",
+                    "num_fac_par_pds",
+                    "cle_facture",
+                    "cle_abonnement",
+                    "date_emission_facture",
+                    "date_releve_index_facture",
+                    "date_releve_index_precedent_facture_composite"
                 ],
                 [
-                    "GN_0782301010021705",
-                    "GN|0782301010021705|23563|1|00000",
-                    "2023-12-21",
-                    156,
-                    "2023-11-29",
-                    "2023-11-30",
-                    6,
+                    "GN_1180280200783101",
+                    "GN|1180280200783101|22220|1|00000",
+                    "2022-08-19",
                     1,
-                    4
-                ],
-                [
-                    "GN_0742100100201901",
-                    "GN|0742100100201901|24513|1|00000",
-                    "2024-03-29",
-                    38199,
-                    "2023-04-13",
-                    "2024-03-13",
-                    1,
-                    335,
+                    "2022-01-06",
+                    "2022-07-31",
+                    5,
+                    206,
                     1
                 ],
                 [
-                    "GN_0742100100202001",
-                    "GN|0742100100202001|23320|1|00000",
-                    "2023-05-03",
-                    359,
-                    "2022-04-05",
-                    "2023-04-03",
-                    2,
-                    363,
+                    "GN_1180280200785501",
+                    "GN|1180280200785501|22220|1|00000",
+                    "2022-08-19",
+                    97,
+                    "2022-01-06",
+                    "2022-07-31",
+                    5,
+                    206,
+                    1
+                ],
+                [
+                    "GN_1180280200785702",
+                    "GN|1180280200785702|22220|1|00000",
+                    "2022-08-19",
+                    30,
+                    "2022-01-06",
+                    "2022-07-31",
+                    5,
+                    206,
+                    1
+                ],
+                [
+                    "GN_1180280200785801",
+                    "GN|1180280200785801|22220|1|00000",
+                    "2022-08-19",
+                    39,
+                    "2022-01-06",
+                    "2022-07-31",
+                    5,
+                    206,
+                    1
+                ],
+                [
+                    "GN_1180280200787001",
+                    "GN|1180280200787001|22220|1|00000",
+                    "2022-08-19",
+                    94,
+                    "2022-01-06",
+                    "2022-07-31",
+                    5,
+                    206,
                     1
                 ]
             ],
-            "CLE_ABONNEMENT": {
-                "column_names": "CLE_ABONNEMENT",
-                "column_description": "Identifiant de l'abonné",
-                "type": "TEXT"
+            "nb_jours_connus": {
+                "column_names": "nb_jours_connus",
+                "column_description": "",
+                "type": "integer"
             },
-            "CLE_FACTURE": {
-                "column_names": "CLE_FACTURE",
-                "column_description": "Identifiant de la facture. Plusieurs factures peuvent être associées à un même abonné.",
-                "type": "TEXT"
+            "nb_factures_par_pds": {
+                "column_names": "nb_factures_par_pds",
+                "column_description": "",
+                "type": "integer"
             },
-            "DATE_EMISSION_FACTURE": {
-                "column_names": "DATE_EMISSION_FACTURE",
-                "column_description": "Date d'émission de la facture",
-                "type": "TEXT"
+            "conso_facture": {
+                "column_names": "conso_facture",
+                "column_description": "",
+                "type": "integer"
             },
-            "CONSO_FACTURE": {
-                "column_names": "CONSO_FACTURE",
-                "column_description": "La consommation qui apparaît dans la facture, qui est facturée au consommateur",
-                "type": "INTEGER"
+            "num_fac_par_pds": {
+                "column_names": "num_fac_par_pds",
+                "column_description": "",
+                "type": "integer"
             },
-            "DATE_RELEVE_INDEX_PRECEDENT_FACTURE_COMPOSITE": {
-                "column_names": "DATE_RELEVE_INDEX_PRECEDENT_FACTURE_COMPOSITE",
-                "column_description": "La consommation d'une facture se calcule par la différence d'un index. L'index 'd'aujourd'hui' moins l'index 'd'hier'. Ici il s'agit de la date de relevé de l'index le plus ancien ayant servi au calcul de la consommation.",
-                "type": "TEXT"
+            "cle_facture": {
+                "column_names": "cle_facture",
+                "column_description": "",
+                "type": "character varying"
             },
-            "DATE_RELEVE_INDEX_FACTURE": {
-                "column_names": "DATE_RELEVE_INDEX_FACTURE",
-                "column_description": "Date de relevé de l'index le plus récent ayant servi au calcul de la consommation.",
-                "type": "TEXT"
+            "cle_abonnement": {
+                "column_names": "cle_abonnement",
+                "column_description": "",
+                "type": "character varying"
             },
-            "NB_FACTURES_PAR_PDS": {
-                "column_names": "NB_FACTURES_PAR_PDS",
-                "column_description": "Le nombre de factures par point de service.",
-                "type": "INTEGER"
+            "date_emission_facture": {
+                "column_names": "date_emission_facture",
+                "column_description": "",
+                "type": "date"
             },
-            "NB_JOURS_CONNUS": {
-                "column_names": "NB_JOURS_CONNUS",
-                "column_description": "Le nombre de jours connus sur la facture (correspond normalement à la date de relevé index facture moins la date de relevé de l'index précédent)",
-                "type": "INTEGER"
+            "date_releve_index_facture": {
+                "column_names": "date_releve_index_facture",
+                "column_description": "",
+                "type": "date"
             },
-            "NUM_FAC_PAR_PDS": {
-                "column_names": "NUM_FAC_PAR_PDS",
-                "column_description": "L'ordre de la facture par point de service (1ère facture, 2ème facture, ...)",
-                "type": "INTEGER"
+            "date_releve_index_precedent_facture_composite": {
+                "column_names": "date_releve_index_precedent_facture_composite",
+                "column_description": "",
+                "type": "date"
             }
         }
     },
