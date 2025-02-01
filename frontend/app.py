@@ -10,7 +10,7 @@ dossier_source = os.path.join(os.path.dirname(__file__), "..", "backend")
 sys.path.append(dossier_source)
 
 from find_constraints import generate_constraints
-# from create_database_json_from_database.py import get_database_json_from_database
+from create_database_json_from_database import get_database_json_from_database
 
 MODEL_ID = "mistral.mistral-large-2407-v1:0" 
 
@@ -20,14 +20,6 @@ bedrock = boto3.client(
     aws_access_key_id="AKIAUMYCIUHUBUQMWTUS",
     aws_secret_access_key="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",
 )
-
-# # Charger le JSON de la base
-# json_path = os.path.join("..", "data", "tables_filled.json")
-# if os.path.exists(json_path):
-#     with open(json_path, "r", encoding="utf-8") as f:
-#         db_json = json.load(f)
-# else:
-#     db_json = {}
 
 # Configuration de la page
 st.set_page_config(page_title="Pipeline SQL - Téléversement & Contraintes", layout="centered")
@@ -46,11 +38,19 @@ if "prompt" not in st.session_state:
 if "selected_constraints" not in st.session_state:
     st.session_state["selected_constraints"] = []  # Liste de booléens pour la sélection
 
+# On stocke également les chemins des fichiers uploadés
+if "input_json_path" not in st.session_state:
+    st.session_state["input_json_path"] = ""
+if "db_file" not in st.session_state:
+    st.session_state["db_file"] = ""
+if "txt_path" not in st.session_state:
+    st.session_state["txt_path"] = ""
+
 # Vérifier et créer le dossier `data/`
 DATA_FOLDER = "data"
 os.makedirs(DATA_FOLDER, exist_ok=True)
 
-# Chemin vers la base de données SQLite (si téléversée)
+# Chemin vers la base de données SQLite (localement, après upload)
 DB_PATH = os.path.join(DATA_FOLDER, "database.db")
 
 def save_uploaded_file(uploaded_file, folder):
@@ -63,7 +63,7 @@ def save_uploaded_file(uploaded_file, folder):
     return None
 
 def display_upload_section():
-    """Affiche la section de téléchargement des fichiers."""
+    """Affiche la section de téléchargement des fichiers et enregistre leurs chemins."""
     st.title("📂 Téléversement de fichiers vers `data/`")
     st.subheader("Déposez vos fichiers ici 👇")
 
@@ -78,9 +78,9 @@ def display_upload_section():
             try:
                 with open(json_path_local, "r", encoding="utf-8") as f:
                     json_content = json.load(f)
-                st.json(json_content)
             except json.JSONDecodeError:
                 st.error("❌ Erreur : le fichier JSON semble invalide.")
+            st.session_state["input_json_path"] = json_path_local
 
     with col2:
         st.markdown("### 🗃️ Base de données SQLite")
@@ -88,6 +88,7 @@ def display_upload_section():
         if db_file:
             db_path_local = save_uploaded_file(db_file, DATA_FOLDER)
             st.success(f"✅ Base de données SQLite enregistrée : `{db_path_local}`")
+            st.session_state["db_file"] = db_path_local
 
     with col3:
         st.markdown("### 📄 Fichier Texte")
@@ -98,20 +99,38 @@ def display_upload_section():
             with open(txt_path_local, "r", encoding="utf-8") as f:
                 txt_content = f.read()
             st.text_area("📖 Contenu du fichier texte :", txt_content, height=200)
+            st.session_state["txt_path"] = txt_path_local
 
+    # Bouton pour passer à la génération de contraintes
     if st.button("Générer contraintes"):
+        # Vérifier que les chemins ont été enregistrés
+        if st.session_state["db_file"] and st.session_state["input_json_path"] and st.session_state["txt_path"]:
+            # Lire le contexte depuis le fichier texte
+            with open(st.session_state["txt_path"], "r", encoding="utf-8") as f:
+                contexte = f.read()
+            # Appeler la fonction pour créer le JSON de la base depuis la base SQLite et le fichier JSON d'input
+            st.session_state['db_json'] = get_database_json_from_database(
+                st.session_state["db_file"],
+                contexte,
+                st.session_state["input_json_path"],
+                save_json=False
+            )
+        else:
+            st.error("Veuillez téléverser le fichier JSON, la base de données SQLite et le fichier texte.")
+            return
+
         st.session_state["generation_phase"] = True
         # Appel de generate_constraints qui renvoie un JSON et un prompt
         constraints_json, st.session_state["prompt"] = generate_constraints(
             5,  # Nombre de contraintes à générer
             st.session_state["prompt"],
-            db_json,
+            st.session_state['db_json'],
             MODEL_ID,
             bedrock,
             st.session_state["validated_constraints"],
             st.session_state["rejected_constraints"]
         )
-        # Stocker uniquement la liste des contraintes depuis le JSON
+        # On stocke uniquement la liste des contraintes depuis le JSON
         st.session_state["constraints"] = constraints_json.get("constraints", [])
         st.session_state["selected_constraints"] = [False] * len(st.session_state["constraints"])
 
@@ -137,8 +156,8 @@ def display_constraints_generation_section():
 
     if st.session_state["constraints"]:
         new_selected = []
-        st.write("Veuillez sélectionner les contraintes qui vous conviennent en cochant les cases correspondantes :")
-        # Affichage des 5 contraintes générées (chaque contrainte est un dict avec une clé "description")
+        st.write("Veuillez sélectionner les contraintes qui vous conviennent (description) :")
+        # Affichage des contraintes générées
         for i, constraint in enumerate(st.session_state["constraints"]):
             label = constraint.get("description", "Pas de description")
             selected = st.checkbox(label, value=st.session_state["selected_constraints"][i], key=f"constraint_{i}")
@@ -146,27 +165,23 @@ def display_constraints_generation_section():
         st.session_state["selected_constraints"] = new_selected
 
         if st.button("✅ Valider la sélection et générer de nouvelles contraintes"):
-            # Parcours des contraintes affichées
             for i, selected in enumerate(st.session_state["selected_constraints"]):
                 if selected:
-                    # On ajoute la description de la contrainte validée à la liste
                     st.session_state["validated_constraints"].append(st.session_state["constraints"][i]["description"])
                 else:
                     st.session_state["rejected_constraints"].append(st.session_state["constraints"][i]["description"])
-            # Générer de nouvelles contraintes en passant l'historique des prompts
+            # Générer de nouvelles contraintes avec l'historique des prompts
             constraints_json, st.session_state["prompt"] = generate_constraints(
                 5,
                 st.session_state["prompt"],
-                db_json,
+                st.session_state['db_json'],  # On réutilise le JSON généré lors de l'upload
                 MODEL_ID,
                 bedrock,
                 st.session_state["validated_constraints"],
                 st.session_state["rejected_constraints"]
             )
-            # Affecter la nouvelle liste de contraintes (en extrayant la clé "constraints")
             st.session_state["constraints"] = constraints_json.get("constraints", [])
             st.session_state["selected_constraints"] = [False] * len(st.session_state["constraints"])
-
     else:
         st.success("✅ Toutes les contraintes ont été évaluées.")
 

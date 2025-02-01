@@ -48,7 +48,7 @@ import json
 
 
 
-def get_database_json_from_database(db_path, contexte, input_json,save_json=False):
+def get_database_json_from_database(db_path, contexte, input_json, save_json=False):
     
 
     conn = sqlite3.connect(db_path)
@@ -119,10 +119,10 @@ def get_database_json_from_database(db_path, contexte, input_json,save_json=Fals
 
     if save_json:
         # Sauvegarde du JSON mis à jour
-        with open("backend/test_create_database_json/database_json.json", "w", encoding="utf-8") as f:
+        with open("test_create_database_json/database_json.json", "w", encoding="utf-8") as f:
             json.dump(output, f, indent=4, ensure_ascii=False)
 
-        print(f"Le fichier '{"database_json.json"}' a été généré avec succès.")
+        print(f"Le fichier database_json.json a été généré avec succès.")
 
     # Fermeture de la connexion à la base
     conn.close()
@@ -131,7 +131,7 @@ def get_database_json_from_database(db_path, contexte, input_json,save_json=Fals
 
 # Exemple d'utilisation
 if __name__ == "__main__":
-    db_path = "data/veolia_data.db"
+    db_path = "../data/veolia_data.db"
     contexte = "test réussi"
-    input_json = "data/input.json"
+    input_json = "../data/input.json"
     get_database_json_from_database(db_path, contexte, input_json, save_json=True)
