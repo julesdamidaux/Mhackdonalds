@@ -6,7 +6,7 @@ import sqlite3
 file_path = 'translated_queries.json'
 
 #lien de la database
-db_path='veolia_data_duplicate.db'
+db_path='database.db'
 
 # Lire le contenu du fichier JSON
 with open(file_path, 'r') as file:
@@ -58,3 +58,10 @@ for request in data:
     })
         # Fermer la connexion
         conn.close()
+
+
+with open('executed_queries.json', 'w') as file:
+    json.dump(executed_queries, file, indent=4)
+
+with open('results_queries.json', 'w') as file:
+    json.dump(results_queries, file, indent=4)
