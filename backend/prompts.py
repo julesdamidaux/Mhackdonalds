@@ -3,7 +3,8 @@
 
 INTRO_METADATA = "Here is the description of a database: \n"
 
-TASK_METADATA = "Fill in the missing colums descriptions in the database description. Use the context. Use the names of tables and fields. Use the examples of rows provided.\n"
+TASK_METADATA = """Fill in the missing columns descriptions in the database description. Use the context. Use the names of tables and fields. Use the examples of rows provided. Also change the column types when needed. For example,
+    if dates are encoded as text, change them to date type.\n"""
 
 FORMAT_METADATA = "Answer by providing exactly the same json as in input, but with the missing information filled in. Do not give me anything more than this json. Answer in json format\n"
 
