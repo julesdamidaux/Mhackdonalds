@@ -16,10 +16,10 @@ Instructions pour installer et configurer le projet localement.
 
 ```bash
 # Clone le dépôt
-git clone https://github.com/ton_utilisateur/mon_projet.git
+git clone https://github.com/julesdamidaux/Mhackdonalds.git
 
 # Accède au répertoire du projet
-cd mon_projet
+cd Mhackdonalds
 pip install -r requirements.txt
 
 
