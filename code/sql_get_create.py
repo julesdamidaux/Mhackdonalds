@@ -1,3 +1,7 @@
+"""
+Crée les fichiers JSON et txt que l'on passera ensuite en prompt à Mistral pour la création des contraintes.
+"""
+
 import sqlite3
 import json
 
@@ -21,7 +25,7 @@ def extract_table_definitions(db_file):
                 "create_statement": create_sql,
                 "columns" : {
                     "column_names" : column_names,
-                    "column_meta_data" : ""
+                    "column_description" : ""
                 },
                 "first_3_rows": rows
             }
@@ -45,9 +49,9 @@ def save_to_txt(data, output_file):
             f.write("\n")
 
 def main():
-    input_db_file = "veolia_data.db"  # Remplace par le nom de ton fichier .db
-    output_json_file = "tables.json"
-    output_txt_file = "tables.txt"
+    input_db_file = "../data/veolia_data.db"  # Remplace par le nom de ton fichier .db
+    output_json_file = "../data/tables.json"
+    output_txt_file = "../data/tables.txt"
 
     tables_data = extract_table_definitions(input_db_file)
     save_to_json(tables_data, output_json_file)

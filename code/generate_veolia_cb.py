@@ -1,3 +1,8 @@
+"""
+Crée la database SQL à partir des fichiers CSV
+"""
+
+
 import sqlite3
 import pandas as pd
 
@@ -7,7 +12,7 @@ def load_csv_to_sqlite(csv_file, table_name, conn):
     df.to_sql(table_name, conn, if_exists='replace', index=False)
 
 # Connexion à la base SQLite (création si n'existe pas)
-conn = sqlite3.connect("veolia_data.db")
+conn = sqlite3.connect("../data/veolia_data.db")
 cursor = conn.cursor()
 
 # Activer les clés étrangères dans SQLite
@@ -46,9 +51,9 @@ cursor.execute("""
 """)
 
 # Charger les données des CSV dans les tables correspondantes
-load_csv_to_sqlite("veolia-data-abonnements.csv", "abonnements", conn)
-load_csv_to_sqlite("veolia-data-consos.csv", "consos", conn)
-load_csv_to_sqlite("veolia-data-factures.csv", "factures", conn)
+load_csv_to_sqlite("../data/veolia-data-abonnements.csv", "abonnements", conn)
+load_csv_to_sqlite("../data/veolia-data-consos.csv", "consos", conn)
+load_csv_to_sqlite("../data/veolia-data-factures.csv", "factures", conn)
 
 # Sauvegarder les changements et fermer la connexion
 conn.commit()
