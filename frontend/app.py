@@ -11,7 +11,8 @@ sys.path.append(dossier_source)
 
 from find_constraints import generate_constraints
 from create_database_json_from_database import get_database_json_from_database
-from fill_metadatas import fill_metadatas
+# from fill_metadatas import fill_metadatas
+# from execute_sql import execute_sql_from_request
 
 MODEL_ID = "mistral.mistral-large-2407-v1:0" 
 
@@ -139,22 +140,6 @@ def display_upload_section():
         st.session_state["constraints"] = constraints_json.get("constraints", [])
         st.session_state["selected_constraints"] = [False] * len(st.session_state["constraints"])
 
-def execute_validated_constraints():
-    """Exécute les contraintes validées sur la base SQLite."""
-    if not os.path.exists(DB_PATH):
-        st.error(f"❌ La base de données `{DB_PATH}` n'existe pas. Vérifiez votre téléversement.")
-        return
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        for constraint in st.session_state["validated_constraints"]:
-            cursor.execute(constraint)
-        conn.commit()
-        conn.close()
-        st.success("✅ Toutes les contraintes validées ont été exécutées avec succès.")
-    except Exception as e:
-        st.error(f"❌ Erreur lors de l'exécution des contraintes : {e}")
-
 def display_constraints_generation_section():
     """Affiche la section de génération et validation des contraintes."""
     st.title("🔍 Sélectionnez les contraintes à valider")
@@ -188,9 +173,6 @@ def display_constraints_generation_section():
             st.session_state["constraints"] = constraints_json.get("constraints", [])
             st.session_state["selected_constraints"] = [False] * len(st.session_state["constraints"])
     else:
-        # On transforme les contraintes validées en JSON pour les exécuter
-        st.session_state["validated_constraints"] = json.dumps(st.session_state["validated_constraints"], indent=4, ensure_ascii=False)
-        print(st.session_state["validated_constraints"])
         st.success("✅ Toutes les contraintes ont été évaluées.")
 
     if st.session_state["validated_constraints"]:
@@ -204,7 +186,10 @@ def display_constraints_generation_section():
             st.markdown(c['description'])
 
     if st.button("🚀 Exécuter les contraintes validées"):
-        execute_validated_constraints()
+        # On transforme les contraintes validées en JSON pour les exécuter
+        st.session_state["validated_constraints"] = json.dumps(st.session_state["validated_constraints"], indent=4, ensure_ascii=False)
+        
+        
 
     if st.button("Retour au téléversement des fichiers"):
         st.session_state["generation_phase"] = False
