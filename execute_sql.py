@@ -1,9 +1,9 @@
 import json
 import boto3
 import sqlite3
+import redshift_connector
 
-
-def execute_sql_from_request(db_path,data):
+def execute_sql_from_request(db_name,data):
 
     executed_queries = []  #liste des requêtes de translated_queries avec le statue, si la requête a été exécutée avec succès ou sinon l'erreur
     results_queries=[] #liste des résultats des requêtes exécutées
@@ -16,13 +16,37 @@ def execute_sql_from_request(db_path,data):
         new_sql_request = sql_request.replace('veolia-data-', '')  #supprimer le préfixe veolia-data- car table enregistrée sans préfixe
         
         # Se connecter à la base de données SQLite
-        conn = sqlite3.connect(db_path)
+        with open("credentials_redshift.json", "r", encoding="utf-8") as f:
+            config = json.load(f)
+
+        ACCESS_KEY = config.get("ACCESS_KEY")
+        SECRET_KEY = config.get("SECRET_KEY")
+
+        session = boto3.Session(
+        aws_access_key_id=ACCESS_KEY,
+        aws_secret_access_key=SECRET_KEY,
+        region_name='us-west-2'
+        )
+
+        client = session.client('redshift-serverless')
+
+        response = client.get_credentials(
+            workgroupName="hackathon",
+        )
+
+        conn = redshift_connector.connect(
+            host='hackathon.302263083496.us-west-2.redshift-serverless.amazonaws.com',
+            database=db_name,
+            port=5439,
+            user=response["dbUser"],
+            password=response['dbPassword'],
+        )
+
         cursor = conn.cursor()
 
         try:
         
-            # Récupérer les résultats
-            results = cursor.fetchall()
+            
             # Exécuter la requête SQL
             cursor.execute(new_sql_request)
 
@@ -56,11 +80,11 @@ def execute_sql_from_request(db_path,data):
 
 # Exemple d'utilisation
 if __name__ == "__main__":
-    db_path='veolia_data_duplicate.db'
+    db_name='dev'
     file_path = 'translated_queries.json'
     with open(file_path, 'r') as file:
          data = json.load(file)
-    executed_queries,results_queries=execute_sql_from_request(db_path,data)
+    executed_queries,results_queries=execute_sql_from_request(db_name,data)
     with open('executed_queries.json', 'w') as file:
         json.dump(executed_queries, file, indent=4)
 
