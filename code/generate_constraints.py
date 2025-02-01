@@ -11,7 +11,7 @@ bedrock = boto3.client(
 
 MODEL_ID = "mistral.mistral-large-2407-v1:0"  # À vérifier
 
-fichier = "../data/tables_filled.json"
+fichier = "data/tables_filled.json"
 
 with open(fichier, "r", encoding="utf-8") as f:
     db_json = json.load(f)
@@ -75,7 +75,7 @@ except json.JSONDecodeError as e:
     exit(1)
 
 # Enregistrer l'objet JSON dans un fichier avec une mise en forme indentée
-with open('../data/constraints.json', 'w', encoding='utf-8') as f:
+with open('data/constraints.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, indent=4, ensure_ascii=False)
 
 print("Fichier JSON enregistré avec succès.")

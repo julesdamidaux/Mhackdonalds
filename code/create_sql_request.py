@@ -14,7 +14,7 @@ bedrock = boto3.client(
 MODEL_ID = "mistral.mistral-large-2407-v1:0"
 
 # Lire le fichier JSON d'entrée
-with open('../data/constraints.json', 'r') as file:
+with open('data/constraints.json', 'r') as file:
     input_data = json.load(file)
 
 # Identifiant du modèle Mistral
@@ -107,7 +107,7 @@ for constraint in input_data['constraints']:
     })
 
 # Enregistrer les résultats dans un nouveau fichier JSON
-with open('../data/constraints_sql.json', 'w') as file:
+with open('data/constraints_sql.json', 'w') as file:
     json.dump(translated_queries, file, indent=4)
 
 print("Traduction terminée. Les requêtes SQL ont été enregistrées dans 'constraints_sql.json'.")

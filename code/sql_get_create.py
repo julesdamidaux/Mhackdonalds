@@ -49,9 +49,9 @@ def save_to_txt(data, output_file):
             f.write("\n")
 
 def main():
-    input_db_file = "../data/veolia_data.db"  # Remplace par le nom de ton fichier .db
-    output_json_file = "../data/tables.json"
-    output_txt_file = "../data/tables.txt"
+    input_db_file = "data/veolia_data.db"  # Remplace par le nom de ton fichier .db
+    output_json_file = "data/tables.json"
+    output_txt_file = "data/tables.txt"
 
     tables_data = extract_table_definitions(input_db_file)
     save_to_json(tables_data, output_json_file)
