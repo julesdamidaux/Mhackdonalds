@@ -16,7 +16,6 @@ La structrue du JSON input est la suivante:
 }
 
 
-
 La structure du JSON output est la suivante:
 {
     "tables": {
@@ -120,10 +119,10 @@ def get_database_json_from_database(db_path, contexte, input_json,save_json=Fals
 
     if save_json:
         # Sauvegarde du JSON mis à jour
-        with open("test.json", "w", encoding="utf-8") as f:
+        with open("backend/test_create_database_json/database_json.json", "w", encoding="utf-8") as f:
             json.dump(output, f, indent=4, ensure_ascii=False)
 
-        print(f"Le fichier '{"test.json"}' a été généré avec succès.")
+        print(f"Le fichier '{"database_json.json"}' a été généré avec succès.")
 
     # Fermeture de la connexion à la base
     conn.close()
@@ -131,8 +130,7 @@ def get_database_json_from_database(db_path, contexte, input_json,save_json=Fals
     return output
 
 # Exemple d'utilisation
-test = False
-if test == True:
+if __name__ == "__main__":
     db_path = "data/veolia_data.db"
     contexte = "test réussi"
     input_json = "data/input.json"

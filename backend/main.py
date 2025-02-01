@@ -1,10 +1,14 @@
-import subprocess
-import sql_get_create
+from create_database_json_from_database import get_database_json_from_database
 
-subprocess.run(["python", "generate_veolia_cb.py.py"], capture_output=True, text=True)
+db_path = "data/veolia_data.db"
+contexte = "test réussi"
+input_json = "data/input.json"
 
-sql_get_create.main()
+if __name__ == "__main__":
 
-subprocess.run(["python", "fill_metadatas.py"], capture_output=True, text=True)
+    database_json = get_database_json_from_database(db_path, contexte, input_json, save_json=False)
 
-subprocess.run(["python", "generate_constraints.py"], capture_output=True, text=True)
+
+"""
+
+subprocess.run(["python", "generate_constraints.py"], capture_output=True, text=True)"""
