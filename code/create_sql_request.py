@@ -14,17 +14,14 @@ bedrock = boto3.client(
 MODEL_ID = "mistral.mistral-large-2407-v1:0"
 
 # Lire le fichier JSON d'entrée
-with open('input_queries.json', 'r') as file:
+with open('../data/constraints.json', 'r') as file:
     input_data = json.load(file)
+
 # Identifiant du modèle Mistral
 MODEL_ID = "mistral.mistral-large-2407-v1:0"
 
-# Lire le fichier JSON d'entrée
-with open('input_queries.json', 'r') as file:
-    input_data = json.load(file)
 
-
-debut_prompt=''' J'ai liste contraintes pour faire requête SQL : \n
+debut_prompt=''' J'ai une liste de contraintes pour faire des requêtes SQL : \n
     Nom tables : table_name \n
     Nom colonnes : column_name \n
     description requete SQL: description \n
@@ -110,7 +107,7 @@ for constraint in input_data['constraints']:
     })
 
 # Enregistrer les résultats dans un nouveau fichier JSON
-with open('translated_queries.json', 'w') as file:
+with open('../data/constraints_sql.json', 'w') as file:
     json.dump(translated_queries, file, indent=4)
 
-print("Traduction terminée. Les requêtes SQL ont été enregistrées dans 'translated_queries.json'.")
+print("Traduction terminée. Les requêtes SQL ont été enregistrées dans 'constraints_sql.json'.")
