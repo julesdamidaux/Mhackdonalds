@@ -74,7 +74,7 @@ Pour finir un block se charge de la convertion en SQL des idées et les éxécut
 
 ## Structure du Projet
 
-![Alt text](images/diagram.png)
+![Alt text](hackaton_diagrammev2.drawio.png.png)
 
 ## Contribuer
 
