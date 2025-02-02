@@ -1,3 +1,36 @@
+"""
+This module provides a Streamlit application for uploading files, generating SQL constraints, and executing SQL queries.
+Functions:
+    save_uploaded_file(uploaded_file, folder):
+        Saves an uploaded file to the specified folder.
+    display_upload_section():
+        Displays the file upload section and saves the paths of the uploaded files.
+    display_constraints_generation_section():
+        Displays the section for generating and validating constraints manually.
+    display_auto_constraints_section():
+        Displays the section where constraints are generated and selected automatically.
+    display_execution_section():
+        Displays the section with the generated SQL queries and allows the user to execute them and view the results.
+Constants:
+    MODEL_ID: The model ID used for generating constraints and enhancing metadata.
+    DATA_FOLDER: The folder where uploaded files are saved.
+    DB_PATH: The path to the local SQLite database.
+Session State Variables:
+    generation_phase: Indicates whether the constraint generation phase is active.
+    execution_phase: Indicates whether the execution phase is active.
+    constraints: List of currently displayed constraints.
+    validated_constraints: List of accepted constraints.
+    rejected_constraints: List of rejected constraints.
+    prompt: History of prompts sent to the model.
+    selected_constraints: List of booleans for constraint selection.
+    auto_constraints: Indicates if constraints were selected automatically.
+    input_json_path: Path to the uploaded JSON file.
+    txt_path: Path to the uploaded text file.
+    db_name: Name of the database.
+    db_json: JSON representation of the database.
+    csv_files: List of generated CSV files.
+"""
+
 import streamlit as st
 import json
 import os
