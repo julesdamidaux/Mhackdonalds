@@ -1,3 +1,16 @@
+"""
+This module provides functionality to retry and correct SQL queries using the Bedrock API.
+Functions:
+    retry_prompt(MODEL_ID, bedroxck, request):
+        Generates a prompt for retrying a SQL query based on the provided request details.
+    retry_execute_sql_from_request(data):
+        Processes a list of SQL query requests, retries the execution of failed queries, and returns the corrected queries.
+Usage Example:
+        # Initialize the Bedrock client
+        # Read the input JSON file
+        datapath = 'executed_queries.json'
+"""
+
 import json
 import boto3
 
