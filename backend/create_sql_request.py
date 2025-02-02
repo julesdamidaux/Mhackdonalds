@@ -1,6 +1,25 @@
+"""
+This script reads constraints from a JSON file, generates SQL validation queries using AWS Bedrock, 
+and saves the translated queries to a new JSON file.
+Functions:
+    create_sql_request(MODEL_ID, bedrock, input_data, db_json):
+        Generates SQL validation queries for given constraints using AWS Bedrock.
+        Parameters:
+            MODEL_ID (str): The model ID for AWS Bedrock.
+            bedrock (boto3.client): The AWS Bedrock client.
+            input_data (list): A list of constraints to generate SQL queries for.
+            db_json (dict): The database schema in JSON format.
+        Returns:
+            list: A list of dictionaries containing the description and SQL query for each constraint.
+Main Execution:
+    - Initializes the AWS Bedrock client.
+    - Reads input constraints from a JSON file.
+    - Calls create_sql_request to generate SQL queries.
+    - Saves the translated queries to a new JSON file.
+"""
+
 import json
 import boto3
-
 import os
 import sys
 
