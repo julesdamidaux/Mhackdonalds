@@ -53,11 +53,18 @@ from discriminate_constraints import discriminate_constraints
 
 MODEL_ID = "anthropic.claude-3-5-sonnet-20241022-v2:0"
 
+with open("credentials.json", "r", encoding="utf-8") as f:
+        config = json.load(f)
+
+aws_access_key_id = config.get("aws_access_key_id")
+aws_secret_access_key = config.get("aws_secret_access_key")
+region_name = config.get("region_name")
+
 bedrock = boto3.client(
     "bedrock-runtime",
-    region_name="us-west-2",
-    aws_access_key_id="AKIAUMYCIUHUI2TD5FWW",
-    aws_secret_access_key="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",
+    region_name=region_name,
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key,
 )
 
 n_constraints = 4
