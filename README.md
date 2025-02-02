@@ -84,7 +84,7 @@ Une fois l’application démarrée, suivez ces étapes :
 
 Exemple Vidéo :
 
-<video src="video.mp4" controls width="600"></video>
+<video src="demo_cut" controls width="600"></video>
 ---
 
 ## 📂 Structure du Projet  
