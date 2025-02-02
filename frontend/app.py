@@ -5,6 +5,7 @@ import sqlite3
 import sys
 import boto3
 import csv
+import pandas as pd
 
 # Ajouter le chemin vers le dossier backend
 dossier_source = os.path.join(os.path.dirname(__file__), "..", "backend")
@@ -14,7 +15,6 @@ from find_constraints_deepseek import generate_constraints
 from create_database_json_from_database import get_database_json_from_database
 from create_sql_request import create_sql_request  # Fonction qui calcule les requêtes SQL à partir des contraintes validées
 from fill_metadatas import fill_metadatas
-from retry_execute_sql import retry_execute_sql_from_request
 from execute_sql import execute_sql_from_request
 
 MODEL_ID = "anthropic.claude-3-5-sonnet-20241022-v2:0" 
@@ -191,31 +191,64 @@ def display_constraints_generation_section():
         st.session_state["generation_phase"] = False
 
 def display_execution_section():
-    """Affiche la nouvelle fenêtre avec les requêtes SQL calculées par create_sql_request()."""
+    """Affiche la nouvelle fenêtre avec les requêtes SQL calculées par create_sql_request() et permet d'afficher un CSV via un menu déroulant."""
     st.title("💻 Requêtes SQL générées")
     # On suppose que create_sql_request() prend les contraintes validées et renvoie une liste de dictionnaires,
     # chaque dictionnaire contenant les clés 'description' et 'sql'
-    sql_queries = create_sql_request(MODEL_ID, bedrock, st.session_state["validated_constraints"],st.session_state["db_json"])
+    sql_queries = create_sql_request(MODEL_ID, bedrock, st.session_state["validated_constraints"], st.session_state["db_json"])
     st.markdown("### Voici les requêtes SQL générées :")
     for query in sql_queries:
         st.markdown(f"- **Description** : {query['description']}\n\n```sql\n{query['sql']}\n```")
 
+    # Bouton pour exécuter les requêtes et sauvegarder les CSV
     if st.button("Exécuter les requêtes"):
         executed_queries, results_queries = execute_sql_from_request(st.session_state['db_name'], sql_queries)
         st.success("✅ Requêtes exécutées avec succès !")
-        # Sauvegarder les résultats au format JSON dans le dossier results
         results_folder = "results"
         os.makedirs(results_folder, exist_ok=True)
+        # Sauvegarder les résultats au format JSON (si besoin)
         executed_json_file = os.path.join(results_folder, "executed_queries.json")
         with open(executed_json_file, "w", encoding="utf-8") as f:
             json.dump(executed_queries, f, indent=4, ensure_ascii=False)
-        results_json_file = os.path.join(results_folder, "results_queries.txt")
-        with open(results_json_file, "w", encoding="utf-8") as f:
-            f.write(str(results_queries))
-        st.markdown("Les résultats ont été sauvegardés dans le dossier `results`.")
+        
+        # Pour chaque résultat de requête, créer un fichier CSV individuel
+        csv_file_list = []
+        for i, query in enumerate(results_queries):
+            csv_filename = os.path.join(results_folder, f"results_query_{i+1}.csv")
+            with open(csv_filename, "w", newline="", encoding="utf-8") as csvfile:
+                writer = csv.writer(csvfile)
+                # Écrire la description
+                description = query.get("description", "Pas de description")
+                writer.writerow([f"Description: {description}"])
+                # Écrire l'en-tête avec les noms de colonnes (si disponibles)
+                columns_names = query.get("columns_names", [])
+                if columns_names:
+                    writer.writerow(columns_names)
+                # Écrire les lignes de résultats en convertissant les dates
+                for row in query.get("results", []):
+                    formatted_row = [item.isoformat() if hasattr(item, "isoformat") else item for item in row]
+                    writer.writerow(formatted_row)
+                writer.writerow([])  # Ligne vide pour séparer
+            csv_file_list.append(os.path.basename(csv_filename))
+            st.write(f"Le fichier '{os.path.basename(csv_filename)}' a été généré avec succès.")
+        
+        # Stocker la liste des CSV dans le session_state pour le menu déroulant
+        st.session_state["csv_files"] = csv_file_list
+
+    # Si la liste des CSV est déjà stockée dans le session_state, afficher le menu déroulant
+    if "csv_files" in st.session_state and st.session_state["csv_files"]:
+        selected_file = st.selectbox("Choisissez un fichier CSV à afficher :", st.session_state["csv_files"], key="selected_csv")
+        if selected_file:
+            csv_path = os.path.join("results", selected_file)
+            try:
+                df = pd.read_csv(csv_path)
+                st.dataframe(df)
+            except Exception as e:
+                st.error(f"Erreur lors de la lecture du CSV : {e}")
 
     if st.button("Retour à la validation des contraintes"):
         st.session_state["execution_phase"] = False
+
 
 # Affichage de la section appropriée selon l'état de session
 if "execution_phase" not in st.session_state or not st.session_state.get("execution_phase"):
@@ -225,3 +258,4 @@ if "execution_phase" not in st.session_state or not st.session_state.get("execut
         display_constraints_generation_section()
 else:
     display_execution_section()
+

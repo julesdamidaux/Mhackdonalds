@@ -3,7 +3,7 @@ import boto3
 import sqlite3
 import redshift_connector
 
-def execute_sql_from_request(db_name,data):
+def execute_sql_from_request(db_name, data):
 
     executed_queries = []  #liste des requêtes de translated_queries avec le statue, si la requête a été exécutée avec succès ou sinon l'erreur
     results_queries=[] #liste des résultats des requêtes exécutées
@@ -53,9 +53,12 @@ def execute_sql_from_request(db_name,data):
 
             # Récupérer les résultats
             results = cursor.fetchall()
+            column_names = [desc[0] for desc in cursor.description]
+
 
             results_queries.append({
                 'description': description,
+                'columns_names': column_names,
                 'results': results
             })
             # Afficher les résultats
