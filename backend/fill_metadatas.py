@@ -1,4 +1,13 @@
-# %% 
+"""
+Fills metadata for a given database JSON using a conversational AI model.
+Args:
+    db_json (dict): The database JSON object to be processed.
+    bedrock (object): The conversational AI model interface.
+    MODEL_ID (str): The identifier for the AI model to be used.
+Returns:
+    dict: The processed metadata as a JSON object.
+"""
+
 import json
 import boto3
 import prompts
