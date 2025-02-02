@@ -11,7 +11,7 @@ import pandas as pd
 dossier_source = os.path.join(os.path.dirname(__file__), "..", "backend")
 sys.path.append(dossier_source)
 
-from find_constraints_deepseek import generate_constraints
+from find_constraints import generate_constraints
 from create_database_json_from_database import get_database_json_from_database
 from create_sql_request import create_sql_request  # Fonction qui calcule les requêtes SQL à partir des contraintes validées
 from fill_metadatas import fill_metadatas

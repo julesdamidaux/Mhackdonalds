@@ -50,6 +50,7 @@ def get_few_shot_prompt(valid_constraints, invalid_constraints):
         prompt += prompts.VALID_CONSTRAINTS + "\n" + json.dumps(constraint) + "\n"
     for constraint in invalid_constraints:
         prompt += prompts.INVALID_CONSTRAINTS + "\n" + json.dumps(constraint) + "\n"
+    prompt += "Do not reproduce the valid or invalid constraints from above, you have to generate NEW constraints." # Sinon le modèle se contente de reproduire les contraintes considérées comme bonnes
     return prompt
 
 
