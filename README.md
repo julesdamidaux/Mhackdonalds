@@ -11,7 +11,8 @@ Une application permettant d'analyser et de corriger les erreurs de bases de don
 - [📥 Installation](#installation)  
 - [🚀 Utilisation](#utilisation)  
 - [📂 Structure du Projet](#structure-du-projet)  
-- [🤝 Contribuer](#contribuer)  
+- [🤝 Contribuer](#contribuer)
+- [Source](#source)  
 
 ---
 
@@ -97,4 +98,9 @@ Le projet est développé par :
 - **Jules D.**  
 - **Rodrigue R.**  
 - **Adrien G.**  
-- **Maxence A.**  
+- **Maxence A.**
+
+## Source
+
+- https://arxiv.org/html/2410.06011v1
+- https://arxiv.org/pdf/2305.11853
