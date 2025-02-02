@@ -23,6 +23,8 @@ def execute_sql_from_request(db_name, data):
         ACCESS_KEY = config.get("aws_access_key_id")
         SECRET_KEY = config.get("aws_secret_access_key")
         region_name = config.get("region_name")
+        host = config.get("host")
+        port = config.get("port")
 
         session = boto3.Session(
         aws_access_key_id=ACCESS_KEY,
@@ -37,9 +39,9 @@ def execute_sql_from_request(db_name, data):
         )
 
         conn = redshift_connector.connect(
-            host='hackathon.302263083496.us-west-2.redshift-serverless.amazonaws.com',
+            host=host,
             database=db_name,
-            port=5439,
+            port=port,
             user=response["dbUser"],
             password=response['dbPassword'],
         )

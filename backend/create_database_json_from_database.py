@@ -43,7 +43,6 @@ La structure du JSON output est la suivante:
 }
 """
 
-import sqlite3
 import json
 import boto3
 import redshift_connector
@@ -63,7 +62,8 @@ def get_database_json_from_database(db_name, contexte, input_json, save_json=Fal
     ACCESS_KEY = config.get("aws_access_key_id")
     SECRET_KEY = config.get("aws_secret_access_key")
     region_name = config.get("region_name")
-
+    host = config.get("host")
+    port = config.get("port")
     session = boto3.Session(
     aws_access_key_id=ACCESS_KEY,
     aws_secret_access_key=SECRET_KEY,
@@ -77,9 +77,9 @@ def get_database_json_from_database(db_name, contexte, input_json, save_json=Fal
     )
 
     conn = redshift_connector.connect(
-        host='hackathon.302263083496.us-west-2.redshift-serverless.amazonaws.com',
+        host=host,
         database=db_name,
-        port=5439,
+        port=port,
         user=response["dbUser"],
         password=response['dbPassword'],
     )
