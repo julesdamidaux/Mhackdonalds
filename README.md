@@ -1,84 +1,102 @@
-# Veolia Project - Data Base Error Analyser
+Voici une version améliorée et esthétiquement plus soignée de votre README, avec une meilleure mise en page, une correction des fautes et une amélioration de la clarté.  
 
-Une brève description de ton projet.
+---
 
-## Table des Matières
+# 🚀 Veolia Project - Data Base Error Analyser  
 
-- [Installation](#installation)
-- [Utilisation](#utilisation)
-- [Structure du Projet](#structure-du-projet)
-- [Contribuer](#contribuer)
+Une application permettant d'analyser et de corriger les erreurs de bases de données en exploitant un modèle de langage (LLM).  
 
-## Installation
+---
 
-Instructions pour installer et configurer le projet localement.
+## 📌 Table des Matières  
+
+- [📥 Installation](#installation)  
+- [🚀 Utilisation](#utilisation)  
+- [📂 Structure du Projet](#structure-du-projet)  
+- [🤝 Contribuer](#contribuer)  
+
+---
+
+## 📥 Installation  
+
+Suivez ces étapes pour installer et configurer le projet localement.  
 
 ```bash
-# Clone le dépôt
+# 1. Clonez le dépôt
 git clone https://github.com/julesdamidaux/Mhackdonalds.git
+cd Mhackdonalds
 
-#Créer un venv dans Mhackdonalds
+# 2. Créez un environnement virtuel
+python -m venv venv
 
-#Activer votre venv
-source activate
+# 3. Activez l'environnement virtuel
+source venv/bin/activate  # Sur macOS/Linux
+venv\Scripts\activate      # Sur Windows
 
-# pip
+# 4. Installez les dépendances
 pip install -r requirements.txt
 
-# Démarrer le frontend
-streamlite run frontend/app.py
+# 5. Démarrez l'application front-end
+streamlit run frontend/app.py
 ```
 
-## Utilisation
+---
 
-1.
+## 🚀 Utilisation  
 
-Une fois le front-end lancé vous pouvez 
-- Remplissez le nom de votre Database sur Redshift
-- Ajouter un descriptif JSON de la Database de la forme suivante :
-```json
-{
-    "tables": {
-        "table_name1": {
-            "create_statement": "CREATE TABLE statement",
-            "example": [
-                ["col1", "col2", ...],
-                ["val1", "val2", ...],
-                ...
-            ],
-            "column1": {
-                "column_names": "col1",
-                "column_description": "description of the columns",
-                "type": "type of the column"
-            },
-            "column2: {
-                "column_names": "col2",
-                "column_description": "description of the columns",
-                "type": "type of the column"
-            },
-            ...
+Une fois l’application démarrée, suivez ces étapes :  
 
-    "contexte": "description du contexte"
-    }
-}
-```
-- Ajouter un fichier contexte.txt qui décrit le contexte d'utilisation de votre Base de Donnée
+1️⃣ **Saisie des informations**  
+   - Remplissez le nom de votre base de données sur **Redshift**.  
+   - Ajoutez un fichier **JSON** décrivant votre base de données sous la forme suivante :  
 
-Les informations manquantes seront complétées par un block LLM.
+   ```json
+   {
+       "tables": {
+           "table_name1": {
+               "create_statement": "CREATE TABLE statement",
+               "example": [
+                   ["col1", "col2"],
+                   ["val1", "val2"]
+               ],
+               "columns": {
+                   "col1": {
+                       "column_description": "Description de la colonne",
+                       "type": "Type de la colonne"
+                   },
+                   "col2": {
+                       "column_description": "Description de la colonne",
+                       "type": "Type de la colonne"
+                   }
+               }
+           }
+       },
+       "contexte": "Description du contexte"
+   }
+   ```
+   - Ajoutez un fichier `contexte.txt` décrivant l'utilisation de votre base de données.  
 
-2.
+2️⃣ **Génération de requêtes SQL**  
+   - L’application analyse les données et propose des **suggestions de requêtes SQL**.  
+   - Vous pouvez sélectionner les meilleures requêtes et affiner les suggestions grâce à un **système de feedback et de few-shot learning**.  
 
-Des suggestions de requetes SQL vous seront proposé, vous pouvez choisir les meilleurs et avec un system de feedback et de few-shot prompt a partir de vos préférences le LLM vous repropose des nouvelles idées.
+3️⃣ **Exécution des requêtes**  
+   - Une fois validées, les requêtes sont converties en SQL et exécutées sur la base de données **Redshift**.  
 
-Pour finir un block se charge de la convertion en SQL des idées et les éxécutes via un lien Redshift sur la Database
+---
 
-## Structure du Projet
+## 📂 Structure du Projet  
 
-![Alt text](hackaton_diagrammev2.drawio.png)
+Voici un aperçu de l'architecture du projet :  
 
-## Contribuer
+![Diagramme du projet](hackaton_diagrammev2.drawio.png)  
 
-- Jules D.
-- Rodrigue R.
-- Adrien G.
-- Maxence A.
+---
+
+## 🤝 Contribuer  
+
+Le projet est développé par :  
+- **Jules D.**  
+- **Rodrigue R.**  
+- **Adrien G.**  
+- **Maxence A.**  
