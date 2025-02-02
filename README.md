@@ -1,5 +1,3 @@
-Voici une version améliorée et esthétiquement plus soignée de votre README, avec une meilleure mise en page, une correction des fautes et une amélioration de la clarté.  
-
 ---
 
 # 🚀 Veolia Project - Data Base Error Analyser  
