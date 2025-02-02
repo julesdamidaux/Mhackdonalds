@@ -1,3 +1,20 @@
+"""
+This module provides functionality to execute SQL queries from a request on a Redshift database.
+Functions:
+    execute_sql_from_request(db_name, data):
+        Executes SQL queries from the provided data on the specified database.
+        Args:
+            db_name (str): The name of the database.
+            data (list): A list of dictionaries containing SQL queries and their descriptions.
+        Returns:
+            tuple: A tuple containing two lists:
+                - executed_queries: A list of dictionaries with the status of each executed query.
+                - results_queries: A list of dictionaries with the results of each executed query.
+Example usage:
+        db_name = 'dev'
+        executed_queries, results_queries = execute_sql_from_request(db_name, data)
+"""
+
 import json
 import boto3
 import sqlite3
