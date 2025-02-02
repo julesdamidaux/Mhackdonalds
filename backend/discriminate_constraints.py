@@ -39,7 +39,7 @@ def discriminate_constraints(n_constraints, initial_prompt, db_json, MODEL_ID, b
         "content": [{"text": initial_prompt}],
     },
     {
-        "role": "system",
+        "role": "assistant",
         "content": [{"text": constraints_string}],
     },
     {
