@@ -17,16 +17,17 @@ def execute_sql_from_request(db_name, data):
         #print("SQL REQUEST")
         #print(new_sql_request)
         # Se connecter à la base de données SQLite
-        with open("credentials_redshift.json", "r", encoding="utf-8") as f:
+        with open("credentials.json", "r", encoding="utf-8") as f:
             config = json.load(f)
-
-        ACCESS_KEY = config.get("ACCESS_KEY")
-        SECRET_KEY = config.get("SECRET_KEY")
+    
+        ACCESS_KEY = config.get("aws_access_key_id")
+        SECRET_KEY = config.get("aws_secret_access_key")
+        region_name = config.get("region_name")
 
         session = boto3.Session(
         aws_access_key_id=ACCESS_KEY,
         aws_secret_access_key=SECRET_KEY,
-        region_name='us-west-2'
+        region_name=region_name
         )
 
         client = session.client('redshift-serverless')
