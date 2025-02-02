@@ -104,5 +104,7 @@ Le projet est développé par :
 
 ## Sources
 
-- https://arxiv.org/html/2410.06011v1
-- https://arxiv.org/pdf/2305.11853
+-Large Language Model Enhanced Text-to-SQL Generation: A Survey
+    -https://arxiv.org/html/2410.06011v1
+-How to Prompt LLMs for Text-to-SQL: A Study in Zero-shot,Single-domain, and Cross-domain Settings
+    - https://arxiv.org/pdf/2305.11853
