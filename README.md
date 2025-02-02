@@ -35,12 +35,27 @@ venv\Scripts\activate      # Sur Windows
 # 4. Installez les dépendances
 pip install -r requirements.txt
 
-# 5. Démarrez l'application front-end
+# 4. Ajouter le fichier credentials.json
+cendentials.json
+
+# 6. Démarrez l'application front-end
 streamlit run frontend/app.py
 ```
 
 ---
+Le fichier credentials.json a cette forme :
 
+```json
+{
+"region_name" :"us-west-2",
+"aws_access_key_id" : "TO_COMPLETE",
+"aws_secret_access_key" : "TO_COMPLETE",
+"host" : "TO_COMPLETE",
+"port" : TO_COMPLETE
+}
+```
+
+---
 ## 🚀 Utilisation  
 
 Une fois l’application démarrée, suivez ces étapes :  
