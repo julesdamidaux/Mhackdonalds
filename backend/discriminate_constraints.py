@@ -1,3 +1,28 @@
+"""
+This module provides functions to discriminate constraints for data quality enforcement.
+
+Functions:
+    task_discriminate(n: int) -> str:
+        Generates a prompt asking the user to classify constraints as valid or invalid.
+
+    get_format_discriminate(n: int) -> str:
+        Generates a JSON format prompt for classifying constraints.
+
+    discriminate_constraints(n_constraints: int, initial_prompt: str, db_json: dict, MODEL_ID: str, bedrock: boto3.client, constraints: list) -> tuple:
+        Discriminates constraints into valid and invalid categories using a conversational AI model.
+
+        Parameters:
+            n_constraints (int): Number of constraints suggested.
+            initial_prompt (str): Initial prompt for the AI model.
+            db_json (dict): Database schema in JSON format.
+            MODEL_ID (str): Model ID for the AI model.
+            bedrock (boto3.client): Boto3 client for interacting with the AI model.
+            constraints (list): List of constraints to be classified.
+
+        Returns:
+            tuple: A tuple containing two lists - valid_constraints and invalid_constraints.
+"""
+
 import prompts as prompts
 import json
 import boto3
