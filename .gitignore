@@ -39,6 +39,6 @@ logs/
 
 #ignorer data
 data/
-credentials_redshift.json
+credentials.json
 backend/test_query_redshift.py
 backend/test_create_database_json/database_json.json
