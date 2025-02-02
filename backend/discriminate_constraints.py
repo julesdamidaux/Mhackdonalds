@@ -4,8 +4,8 @@ import boto3
 
 def task_discriminate(n):
 
-    return f"""You suggested {n} constraints to enforce data quality. Choose the {n//2} constraints that are the most important and should be enforced.
-    The {n//2} remaining constraints will not be enforced. Do not change the constraints, simply classify them between valid and invalid constraints."""
+    return f"""You suggested {n} constraints to enforce data quality. Choose the constraints that are the most relevant and should be enforced.
+    The remaining constraints will not be enforced. Do not change the constraints, simply classify them between valid and invalid constraints."""
 
 def get_format_discriminate(n):
 
@@ -26,7 +26,7 @@ def get_format_discriminate(n):
             }
         ]
     }\n
-    Do not output anything else than this JSON object.""" + f"There should be exactly {n//2} valid constraints and {n//2} invalid constraints."
+    Do not output anything else than this JSON object.""" 
 
 
 def discriminate_constraints(n_constraints, initial_prompt, db_json, MODEL_ID, bedrock,
