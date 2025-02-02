@@ -1,11 +1,18 @@
 import json
 import boto3
 
+with open("credentials.json", "r", encoding="utf-8") as f:
+    config = json.load(f)
+
+    aws_access_key_id = config.get("aws_access_key_id")
+    aws_secret_access_key = config.get("aws_secret_access_key")
+    region_name = config.get("region_name")
+
 bedrock = boto3.client(
     "bedrock-runtime",
-    region_name="us-west-2",
-    aws_access_key_id="AKIAUMYCIUHUBUQMWTUS",
-    aws_secret_access_key="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",
+    region_name=region_name,
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key,
     # aws_session_token="VOTRE_TOKEN_DE_SESSION" # facultatif si vous utilisez des credentials temporaires
 )
 

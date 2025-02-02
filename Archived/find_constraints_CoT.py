@@ -147,25 +147,6 @@ def get_few_shot_prompt(valid_constraints, invalid_constraints):
         prompt += prompts.INVALID_CONSTRAINTS + "\n" + json.dumps(constraint) + "\n"
     return prompt
 
-
-if __name__ == "__main__":
-    n_constraints = 3
-    prompt = ""
-    # read demo/db_json.json
-    with open("../demo/db_json.json", "r", encoding="utf-8") as f:
-        db_json = json.load(f)
-    
-    MODEL_ID = "anthropic.claude-3-5-sonnet-20241022-v2:0"
-
-    bedrock = boto3.client(
-        "bedrock-runtime",
-        region_name="us-west-2",
-        aws_access_key_id="AKIAUMYCIUHUBUQMWTUS",
-        aws_secret_access_key="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",
-    )
-
-    output, initial_prompt, output_cot = generate_constraints(n_constraints, prompt, db_json, MODEL_ID, bedrock,
-                                                valid_constraints=[], invalid_constraints=[], return_cot=True)
     
 
 # %%
