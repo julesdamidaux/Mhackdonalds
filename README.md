@@ -82,6 +82,9 @@ Une fois l’application démarrée, suivez ces étapes :
 3️⃣ **Exécution des requêtes**  
    - Une fois validées, les requêtes sont converties en SQL et exécutées sur la base de données **Redshift**.  
 
+Exemple Vidéo :
+
+<video src="video.mp4" controls width="600"></video>
 ---
 
 ## 📂 Structure du Projet  
